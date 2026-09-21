@@ -1,0 +1,82 @@
+[project]
+user_env = []
+session_timeout = 3600
+user_session_timeout = 1296000
+cache = false
+persist_user_env = false
+mask_user_env = false
+allow_origins = ["*"]
+
+[features]
+unsafe_allow_html = false
+latex = false
+user_message_markdown = true
+user_message_autoscroll = true
+assistant_message_autoscroll = true
+auto_tag_thread = true
+edit_message = true
+allow_thread_sharing = false
+favorites = false
+
+[features.slack]
+reaction_on_message_received = false
+
+[features.spontaneous_file_upload]
+    enabled = true
+    accept = ["*/*"]
+    max_files = 20
+    max_size_mb = 500
+
+[features.audio]
+    enabled = false
+    sample_rate = 24000
+
+[features.mcp]
+    enabled = false
+
+[features.mcp.sse]
+    enabled = true
+
+[features.mcp.streamable-http]
+    enabled = true
+
+[features.mcp.stdio]
+    enabled = true
+    allowed_executables = [ "npx", "uvx" ]
+
+[UI]
+# Assistant name shown in header
+name = "MedalRAG"
+
+# Dark theme by default (Gemini-like)
+default_theme = "dark"
+
+# Sidebar open by default
+default_sidebar_state = "open"
+
+# Dev tools (pipeline toggles) in the sidebar
+chat_settings_location = "sidebar"
+
+# Sidebar settings open by default
+default_chat_settings_open = true
+
+# Confirm before starting new chat
+confirm_new_chat = true
+
+# Description
+description = "HIV Clinical Assistant — NIH/HHS + GESIDA + GraphRAG"
+
+# CoT display
+cot = "full"
+
+# Custom CSS
+custom_css = "/public/medalrag.css"
+
+# Alert style
+alert_style = "classic"
+
+logo_file_url = ""
+default_avatar_file_url = ""
+
+[meta]
+generated_by = "2.11.1"

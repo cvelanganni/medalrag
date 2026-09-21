@@ -1,0 +1,26 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+
+.env
+*.pkl
+*.json
+!golden_dataset*.json
+!patient_profiles.json
+conversations/
+patients/
+evaluations/
+__pycache__/
+.venv/
+umls_cache.json
+graph_checkpoint.txt
+
+data/

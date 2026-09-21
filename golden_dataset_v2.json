@@ -1,0 +1,282 @@
+[
+  {
+    "category": "simple",
+    "lang": "en",
+    "question": "What is the recommended first-line antiretroviral regimen for treatment-naive adults with HIV?",
+    "reference": "The recommended first-line regimens for treatment-naive adults include integrase strand transfer inhibitor (INSTI)-based combinations. Preferred regimens are Bictegravir/Tenofovir alafenamide/Emtricitabine (BIC/TAF/FTC, Biktarvy) as a single-tablet regimen, or Dolutegravir (DTG) 50mg once daily plus Tenofovir alafenamide (TAF) 25mg/Emtricitabine (FTC) 200mg once daily. These regimens are preferred due to their high efficacy, favorable safety profile, high barrier to resistance, and once-daily dosing.",
+    "source_file": "guidelines-adult-adolescent-arv.pdf",
+    "source_page": 30
+  },
+  {
+    "category": "simple",
+    "lang": "en",
+    "question": "At what CD4 count should Pneumocystis pneumonia (PCP) prophylaxis be initiated in HIV patients?",
+    "reference": "PCP prophylaxis should be initiated when the CD4 count falls below 200 cells/mm³, or if the CD4 percentage is below 14%, or if the patient has a history of oropharyngeal candidiasis regardless of CD4 count. The preferred prophylactic regimen is trimethoprim-sulfamethoxazole (TMP-SMX) one double-strength (DS) tablet daily. Alternative regimens include TMP-SMX one single-strength tablet daily, dapsone 100mg daily, or aerosolized pentamidine 300mg monthly via Respigard II nebulizer.",
+    "source_file": "guidelines-adult-adolescent-oi.pdf",
+    "source_page": 45
+  },
+  {
+    "category": "simple",
+    "lang": "en",
+    "question": "When should antiretroviral therapy be initiated in adults newly diagnosed with HIV?",
+    "reference": "Antiretroviral therapy (ART) should be initiated as soon as possible after HIV diagnosis in all adults, regardless of CD4 count, to reduce HIV-associated morbidity and mortality and to prevent HIV transmission. Rapid initiation — ideally same-day or within days of diagnosis — is recommended when the patient is ready to start. However, for patients with cryptococcal meningitis or tuberculous meningitis, immediate ART initiation is associated with higher mortality and should be deferred until after appropriate induction therapy.",
+    "source_file": "guidelines-adult-adolescent-arv.pdf",
+    "source_page": 5
+  },
+  {
+    "category": "simple",
+    "lang": "en",
+    "question": "What is considered virologic suppression in patients on antiretroviral therapy?",
+    "reference": "Virologic suppression is defined as a confirmed HIV RNA level below the lower limit of detection of the assay used, typically below 20 to 50 copies/mL on commercial viral load assays. Sustained virologic suppression is the primary goal of antiretroviral therapy. A confirmed HIV RNA above 200 copies/mL after at least 24 weeks on ART is considered virologic failure and warrants evaluation for adherence issues, drug resistance, and potential regimen change.",
+    "source_file": "guidelines-adult-adolescent-arv.pdf",
+    "source_page": 15
+  },
+  {
+    "category": "simple",
+    "lang": "en",
+    "question": "How often should viral load be monitored in patients on stable antiretroviral therapy?",
+    "reference": "For patients with sustained virologic suppression (HIV RNA below the limit of detection) on stable ART for more than 2 years, viral load monitoring every 6 to 12 months is generally sufficient. During the first 6 months of ART, viral load should be measured at initiation, 2 to 4 weeks later, and then every 4 to 8 weeks until suppression is confirmed. After suppression is achieved, monitoring every 3 to 6 months is recommended during the first year, then every 6 to 12 months thereafter for stable patients.",
+    "source_file": "guidelines-adult-adolescent-arv.pdf",
+    "source_page": 25
+  },
+  {
+    "category": "simple",
+    "lang": "es",
+    "question": "¿Cuál es el régimen antirretroviral de primera línea recomendado para adultos con VIH sin tratamiento previo?",
+    "reference": "Según las guías GESIDA, los regímenes preferidos para pacientes naive incluyen combinaciones basadas en inhibidores de la integrasa (INSTIs). El régimen preferido es Bictegravir/Tenofovir alafenamida/Emtricitabina (BIC/TAF/FTC) como comprimido único, o Dolutegravir (DTG) 50mg una vez al día combinado con Tenofovir alafenamida (TAF) 25mg/Emtricitabina (FTC) 200mg una vez al día. Estos regímenes se prefieren por su alta eficacia virológica, elevada barrera genética a la resistencia y perfil de seguridad favorable, incluyendo menor toxicidad renal y ósea.",
+    "source_file": "GuiaGeSIDAPlanNacionalSobreElSidaRespectoAlTratamientoAntirretroviralEnAdultosInfectadosPorElVirusDeLaInmunodeficienciaHumanaActualizacionEnero2022.pdf",
+    "source_page": 30
+  },
+  {
+    "category": "simple",
+    "lang": "es",
+    "question": "¿Cuándo se debe iniciar la terapia antirretroviral en adultos recién diagnosticados con VIH?",
+    "reference": "Las guías GESIDA recomiendan iniciar la terapia antirretroviral (TAR) lo antes posible tras el diagnóstico de infección por VIH, independientemente del recuento de células CD4, para reducir la morbimortalidad asociada al VIH y el riesgo de transmisión. Se recomienda el inicio rápido del TAR, idealmente el mismo día del diagnóstico o en los días siguientes, cuando el paciente esté preparado. Sin embargo, en pacientes con meningitis criptocócica o tuberculosa, el inicio inmediato del TAR se asocia con mayor mortalidad y debe diferirse hasta completar la terapia de inducción adecuada.",
+    "source_file": "GuiaGeSIDAPlanNacionalSobreElSidaRespectoAlTratamientoAntirretroviralEnAdultosInfectadosPorElVirusDeLaInmunodeficienciaHumanaActualizacionEnero2022.pdf",
+    "source_page": 15
+  },
+  {
+    "category": "simple",
+    "lang": "es",
+    "question": "¿Con qué frecuencia se debe monitorizar la carga viral en pacientes con tratamiento antirretroviral estable?",
+    "reference": "En pacientes con supresión viral sostenida (ARN VIH indetectable) en tratamiento antirretroviral estable durante más de 2 años, las guías GESIDA recomiendan monitorizar la carga viral cada 6 a 12 meses. Durante los primeros 6 meses de TAR, se recomienda determinar la carga viral al inicio, a las 4-8 semanas y posteriormente cada 3-6 meses hasta confirmar la supresión virológica. Una vez alcanzada la supresión, la monitorización cada 6 meses es suficiente en pacientes clínicamente estables.",
+    "source_file": "GuiaGeSIDAPlanNacionalSobreElSidaRespectoAlTratamientoAntirretroviralEnAdultosInfectadosPorElVirusDeLaInmunodeficienciaHumanaActualizacionEnero2022.pdf",
+    "source_page": 45
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "A patient on Dolutegravir is starting Rifampin for tuberculosis. What dose adjustment is needed and why?",
+    "reference": "When Dolutegravir (DTG) is co-administered with Rifampin, the DTG dose must be increased to 50mg twice daily (total 100mg/day) due to Rifampin's potent induction of UGT1A1 and CYP3A4 enzymes, which significantly reduces DTG plasma concentrations by approximately 54%. This dose adjustment applies to integrase-inhibitor naive patients without known or suspected INSTI resistance. For patients with suspected INSTI resistance, Dolutegravir should not be used with Rifampin. An alternative is to replace Rifampin with Rifabutin 300mg once daily, which allows standard DTG 50mg once daily dosing due to its weaker enzyme induction.",
+    "source_file": "guidelines-adult-adolescent-arv.pdf",
+    "source_page": 111
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "Why is Dolutegravir contraindicated with Dofetilide, and what is the mechanism?",
+    "reference": "Dolutegravir (DTG) is absolutely contraindicated with Dofetilide because DTG inhibits the renal organic cation transporter 2 (OCT2), which is responsible for tubular secretion of Dofetilide. This inhibition leads to significantly increased Dofetilide plasma concentrations, raising the risk of serious or life-threatening cardiac arrhythmias, including QT interval prolongation and Torsades de Pointes. This drug interaction is a class effect of INSTI drugs that inhibit OCT2, and no dose adjustment can safely mitigate this interaction. Alternative antiarrhythmic agents should be used in patients requiring both HIV treatment with Dolutegravir and antiarrhythmic therapy.",
+    "source_file": "guidelines-adult-adolescent-arv.pdf",
+    "source_page": 115
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What antiretroviral regimen is recommended for HIV patients with hepatitis B (HBV) co-infection?",
+    "reference": "For HIV/HBV co-infected patients, the antiretroviral regimen must include agents with dual activity against both HIV and HBV. The preferred backbone is Tenofovir (either TDF 300mg or TAF 25mg) combined with Emtricitabine (FTC 200mg) or Lamivudine (3TC 300mg), as all four drugs are active against both viruses. Tenofovir alafenamide (TAF) is preferred over TDF in patients with renal impairment or osteoporosis risk. Critically, HBV-active drugs (TDF/TAF or FTC/3TC) must never be discontinued abruptly as this can cause severe HBV reactivation flares, potentially leading to acute liver failure. If ART needs to be changed, HBV coverage must be maintained.",
+    "source_file": "guidelines-adult-adolescent-arv.pdf",
+    "source_page": 95
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What are the preferred antiretroviral regimens for HIV/tuberculosis co-infected patients on Rifampin?",
+    "reference": "For HIV/TB co-infected patients receiving Rifampin-based TB therapy, Efavirenz (EFV) 600mg once daily plus TDF/FTC is the preferred antiretroviral regimen due to favorable pharmacokinetic interactions — Rifampin reduces EFV levels by only 20-25%, which is manageable. An alternative is Dolutegravir 50mg twice daily (increased from standard once daily dosing) due to Rifampin's enzyme-inducing effect on UGT1A1. Integrase inhibitor-based regimens with Raltegravir 800mg twice daily are also an option. Protease inhibitors boosted with Ritonavir or Cobicistat should be avoided with Rifampin as drug levels are dramatically reduced, compromising HIV treatment efficacy.",
+    "source_file": "guidelines-adult-adolescent-arv.pdf",
+    "source_page": 108
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What prophylaxis is recommended for Mycobacterium avium complex (MAC) in HIV patients, and at what CD4 threshold?",
+    "reference": "Primary prophylaxis for disseminated Mycobacterium avium complex (MAC) disease is recommended for HIV-infected adults with CD4 count below 50 cells/mm³ who are not on effective ART or have not achieved virologic suppression. The preferred prophylactic regimen is Azithromycin 1200mg once weekly or Clarithromycin 500mg twice daily. Before initiating MAC prophylaxis, disseminated MAC disease and active Mycobacterium tuberculosis infection must be excluded. MAC prophylaxis can be discontinued when the CD4 count increases above 100 cells/mm³ for at least 3 months in response to effective ART.",
+    "source_file": "guidelines-adult-adolescent-oi.pdf",
+    "source_page": 178
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "Is Dolutegravir preferred or contraindicated during pregnancy, and what are the current recommendations?",
+    "reference": "Dolutegravir (DTG)-based regimens are now the preferred antiretroviral therapy throughout pregnancy, including the first trimester, based on superior virologic efficacy data. Earlier concerns about a potential increased risk of neural tube defects (NTDs) with periconceptional DTG exposure, identified in a Botswana surveillance study, have been reassessed — subsequent larger studies showed NTD risk is not significantly elevated above baseline. The recommended regimen during pregnancy is DTG 50mg once daily plus TAF 25mg/FTC 200mg. Rapid virologic suppression is critical to prevent mother-to-child transmission, and DTG achieves this more reliably than alternative regimens.",
+    "source_file": "guidelines-perinatal.pdf",
+    "source_page": 96
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What dose adjustment is required for Dolutegravir when co-administered with Carbamazepine?",
+    "reference": "Carbamazepine is a potent inducer of CYP3A4 and UGT1A1 enzymes, which significantly reduces Dolutegravir (DTG) plasma concentrations, similar to the interaction with Rifampin. When DTG is co-administered with Carbamazepine, the DTG dose should be increased to 50mg twice daily to compensate for the enhanced metabolism. This adjustment applies to patients without known or suspected INSTI resistance mutations. If possible, alternative anticonvulsants with less enzyme-inducing potential — such as Levetiracetam, Lamotrigine, or Valproic acid — should be considered to allow standard DTG dosing at 50mg once daily.",
+    "source_file": "guidelines-adult-adolescent-arv.pdf",
+    "source_page": 112
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What drugs make up the Bictegravir/Emtricitabine/Tenofovir alafenamide regimen and for which patients is it preferred?",
+    "reference": "Bictegravir/Emtricitabine/Tenofovir alafenamide (BIC/FTC/TAF, brand name Biktarvy) is a complete single-tablet regimen combining Bictegravir 50mg (second-generation INSTI with high barrier to resistance), Emtricitabine 200mg (NRTI active against HIV and HBV), and Tenofovir alafenamide 25mg (NRTI with superior renal and bone safety profile vs TDF). BIC/FTC/TAF is a preferred initial regimen for most ART-naive adults including those with HBV co-infection, renal impairment (eGFR ≥30 mL/min), or osteoporosis. It can be taken with or without food and requires no boosting agent. It should be avoided with Rifampin due to pharmacokinetic interactions.",
+    "source_file": "guidelines-adult-adolescent-arv.pdf",
+    "source_page": 35
+  },
+  {
+    "category": "complex",
+    "lang": "es",
+    "question": "Un paciente con VIH toma Dolutegravir y va a iniciar Rifampicina por tuberculosis. ¿Qué ajuste de dosis se necesita y por qué?",
+    "reference": "Cuando se coadministra Dolutegravir (DTG) con Rifampicina, la dosis de DTG debe aumentarse a 50mg dos veces al día (total 100mg/día) debido a que la Rifampicina induce potentemente las enzimas UGT1A1 y CYP3A4, reduciendo las concentraciones plasmáticas de DTG aproximadamente un 54%. Este ajuste se aplica a pacientes sin resistencia conocida a los inhibidores de la integrasa (INSTIs). Como alternativa, puede sustituirse la Rifampicina por Rifabutina 300mg una vez al día, que permite mantener la dosis estándar de DTG 50mg una vez al día al tener menor efecto inductor enzimático.",
+    "source_file": "GuiaGeSIDAPlanNacionalSobreElSidaRespectoAlTratamientoAntirretroviralEnAdultosInfectadosPorElVirusDeLaInmunodeficienciaHumanaActualizacionEnero2022.pdf",
+    "source_page": 92
+  },
+  {
+    "category": "complex",
+    "lang": "es",
+    "question": "¿Qué régimen antirretroviral se recomienda para pacientes con VIH y coinfección por hepatitis B (VHB)?",
+    "reference": "Para los pacientes coinfectados por VIH/VHB, el régimen antirretroviral debe incluir agentes con actividad dual contra ambos virus. El esquema de elección incluye Tenofovir (TDF 300mg o TAF 25mg) combinado con Emtricitabina (FTC 200mg) o Lamivudina (3TC 300mg), ya que los cuatro fármacos son activos frente al VIH y al VHB. Se prefiere TAF sobre TDF en pacientes con insuficiencia renal u osteoporosis. Es fundamental no interrumpir bruscamente los fármacos activos frente al VHB (TDF/TAF o FTC/3TC), ya que puede producirse una reactivación grave del VHB con riesgo de insuficiencia hepática aguda.",
+    "source_file": "GuiaGeSIDAPlanNacionalSobreElSidaRespectoAlTratamientoAntirretroviralEnAdultosInfectadosPorElVirusDeLaInmunodeficienciaHumanaActualizacionEnero2022.pdf",
+    "source_page": 70
+  },
+  {
+    "category": "complex",
+    "lang": "es",
+    "question": "¿Cuál es la profilaxis recomendada para la encefalitis por Toxoplasma gondii en pacientes con VIH y cuándo iniciarla?",
+    "reference": "La profilaxis primaria frente a la encefalitis por Toxoplasma gondii se recomienda en pacientes VIH positivos con recuento de CD4 inferior a 100 células/mm³ que sean seropositivos para IgG anti-Toxoplasma. El régimen de elección es trimetoprim-sulfametoxazol (TMP-SMX) un comprimido doble fuerza (160/800mg) una vez al día, que proporciona además profilaxis frente a Pneumocystis jirovecii (PCP). La profilaxis puede suspenderse cuando el recuento de CD4 supera las 200 células/mm³ de forma mantenida durante al menos 3 meses en respuesta al TAR. En pacientes con alergia a las sulfamidas puede utilizarse Pirimetamina 50mg semanalmente más Dapsona 50mg diarios.",
+    "source_file": "GuiaGeSIDAPlanNacionalSobreElSidaRespectoAlTratamientoAntirretroviralEnAdultosInfectadosPorElVirusDeLaInmunodeficienciaHumanaActualizacionEnero2022.pdf",
+    "source_page": 115
+  },
+  {
+    "category": "complex",
+    "lang": "es",
+    "question": "¿Está el Dolutegravir contraindicado durante el embarazo según las guías GESIDA actualizadas?",
+    "reference": "Según las guías GESIDA actualizadas, el Dolutegravir (DTG) es actualmente el régimen preferido durante el embarazo, incluyendo el primer trimestre, basándose en su superior eficacia virológica. Las preocupaciones iniciales sobre un posible incremento del riesgo de defectos del tubo neural (DTN) con la exposición periconcepcional a DTG, identificadas en un estudio de vigilancia en Botswana, han sido reevaluadas — estudios posteriores más amplios no mostraron un riesgo significativamente elevado. El régimen recomendado durante el embarazo es DTG 50mg una vez al día más TAF/FTC. La supresión virológica rápida es esencial para prevenir la transmisión materno-fetal.",
+    "source_file": "gesida_VIH_embarazo.pdf",
+    "source_page": 25
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What is the recommended nPEP regimen for an otherwise healthy adult who presents within 72 hours of a high-risk exposure to a known HIV-positive source?",
+    "reference": "For an otherwise healthy adult who presents within 72 hours of a high-risk exposure to a known HIV-positive source, a 28-day course of a 3-drug antiretroviral regimen is recommended. The preferred regimen includes tenofovir disoproxil fumarate (TDF) 300 mg with emtricitabine 200 mg once daily, plus either raltegravir (RAL) 400 mg twice daily or dolutegravir (DTG) 50 mg daily. This recommendation is based on evidence levels [VI-A2ci] and [VII-C]. The rationale for this regimen is to provide effective prophylaxis against HIV transmission in cases of substantial risk exposure.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 8
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "Which antiretroviral medications are not recommended for nPEP use in pregnant women and why?",
+    "reference": "Certain antiretrovirals are not recommended for nPEP use in pregnant women due to their association with severe side effects, toxicity, potential for teratogenicity, or other untoward effects. These medications include Efavirenz (EFV), Nevirapine (NVP), and the combination of Stavudine (d4T) plus Didanosine (DDI). Additionally, using Indinavir (IDV) without Ritonavir (RTV) boosting has demonstrated altered drug metabolism during pregnancy. Despite these concerns, no severe side effects, toxicity, or adverse pregnancy outcomes have been reported among HIV-uninfected women taking antiretrovirals for oPEP or nPEP.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 17
+  },
+  {
+    "category": "simple",
+    "lang": "en",
+    "question": "What does the abbreviation '3TC' stand for in the context of HIV treatment?",
+    "reference": "In the context of HIV treatment, the abbreviation '3TC' stands for lamivudine. Lamivudine is an antiretroviral medication used to prevent and treat HIV/AIDS. It is often included in combination therapies for its effectiveness in reducing viral load and improving immune function. Understanding these abbreviations is crucial for healthcare providers to ensure accurate communication and treatment planning.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 5
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What are the common side effects associated with the antiretroviral regimens used in nPEP, and which drugs are included in these regimens?",
+    "reference": "In a meta-analysis of 24 nPEP-related studies, clinicians prescribed various antiretroviral regimens to 2,166 sexually assaulted persons. All 2-drug regimens contained Zidovudine (ZDV) and Lamivudine (3TC), except for one study where ZDV and zalcitabine were used. The 3-drug regimens included combinations of ZDV, 3TC, Nelfinavir (NFV), Indinavir (IDV), Lopinavir/ritonavir (LPV/r), Nevirapine (NVP), Efavirenz (EFV), or co-formulated Emtricitabine/Tenofovir (FTC/TDF) with co-formulated LPV/r. The most commonly reported side effects were nausea, vomiting, diarrhea, and fatigue.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 14
+  },
+  {
+    "category": "simple",
+    "lang": "en",
+    "question": "What is the recommended procedure for initiating nPEP when rapid HIV test results are unavailable?",
+    "reference": "If rapid HIV blood test results are unavailable, and nPEP is otherwise indicated, it should be initiated without delay. The treatment can be discontinued if the patient is later determined to have HIV infection already or if the source is determined not to have HIV infection. This approach ensures timely intervention to reduce the risk of HIV acquisition while allowing for adjustments based on subsequent test results. The guideline emphasizes the importance of rapid evaluation and initiation of nPEP within 72 hours of potential exposure that presents a substantial risk for HIV acquisition.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 7
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "Under what circumstances should nPEP be considered for children with evidence of chronic sexual abuse?",
+    "reference": "nPEP (non-occupational post-exposure prophylaxis) can be considered for children with evidence of chronic sexual abuse if they come to the attention of a healthcare provider within 72 hours after their most recent exposure. This decision should be made on a case-by-case basis. Additionally, child protective services should be engaged to consider the removal of the child from exposure to the perpetrator of the sexual abuse. The rationale for this approach is to prevent HIV acquisition following a recent exposure, while also addressing the child's safety and well-being by involving protective services.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 23
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What is the recommended approach for managing patients with frequent HIV exposure events, and when is nPEP indicated in such cases?",
+    "reference": "For patients with frequent HIV exposure events, such as those with HIV-discordant sex partners who inconsistently use condoms or people who inject drugs (PWID) who often share injection equipment, frequent, repeated courses of nPEP should not be prescribed. Instead, healthcare providers should provide or coordinate referrals for intensive sexual or injection risk-reduction interventions and consider prescribing daily oral doses of the fixed-dose combination of Tenofovir Disoproxil Fumarate (TDF) and Emtricitabine (FTC), known as Truvada, for PrEP. However, if the most recent recurring exposure occurred within the 72 hours prior to evaluation, nPEP may be indicated, with a transition to PrEP after completing 28 days of nPEP medication.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 23
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What laboratory evaluations are recommended for persons prescribed tenofovir DF, emtricitabine, and raltegravir or dolutegravir as part of nPEP, and what is the schedule for these tests?",
+    "reference": "For persons prescribed tenofovir DF (disoproxil fumarate), emtricitabine, and either raltegravir or dolutegravir as part of non-occupational post-exposure prophylaxis (nPEP), the recommended laboratory evaluations include serum creatinine and liver function tests, specifically alanine transaminase (ALT) and aspartate aminotransferase (AST). These tests should be conducted at baseline and again at 4–6 weeks after exposure. The serum creatinine test is used for calculating the estimated creatinine clearance, which is important for assessing renal function and ensuring safe dosing of the medications. Monitoring liver enzymes helps detect potential hepatotoxicity associated with the antiretroviral regimen.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 26
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What was the outcome of using a combination of ZDV, 3TC, and high-dose IDV for nPEP in a macaque study modeling vaginal HIV exposure?",
+    "reference": "In a macaque study designed to model nPEP for vaginal HIV exposure, a combination of Zidovudine (ZDV), Lamivudine (3TC), and a high dose of Indinavir (IDV) protected 4 out of 6 animals from vaginal SIV infection. This regimen was initiated within 4 hours after vaginal exposure and continued for 28 days. In contrast, all 6 animals in the control group receiving a placebo became SIV infected. This suggests that early initiation and continuation of this drug combination can be effective in preventing SIV infection in this model.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 14
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What was the outcome of the 13-week, 4-drug nPEP regimen in the case of the 12-year-old girl with sickle-cell disease who received a blood transfusion?",
+    "reference": "In the case of a 12-year-old girl in Saudi Arabia with sickle-cell disease who was inadvertently transfused with a large volume of packed red blood cells, a 13-week, 4-drug nPEP regimen was used. The regimen included tenofovir disoproxil fumarate (TDF), emtricitabine (FTC), ritonavir-boosted darunavir (DRV/r), which was later changed to lopinavir (LPV), and raltegravir (RAL). This regimen resulted in the loss of detectable HIV-1 antibodies. Additionally, no HIV-1 DNA or plasma HIV-1 RNA was detected by PCR testing during the 8-month follow-up period.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 13
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What steps should a healthcare provider take to guide the choice of nPEP medications when the source person is known to have HIV?",
+    "reference": "A healthcare provider should attempt to interview the source person or their healthcare provider to determine the history of antiretroviral use and the most recent viral load. This information can help guide the choice of nPEP medications to avoid prescribing antiretroviral medications to which the source-virus is likely to be resistant. If the person with HIV infection is willing, the clinician might consider drawing blood for viral load and resistance testing. The results of these tests might be useful in modifying the initial nPEP medications if they can be obtained promptly.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 25
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What is the effectiveness of subcutaneous tenofovir as a post-exposure prophylaxis in macaque models when initiated at different times post-exposure?",
+    "reference": "Subcutaneous tenofovir was shown to block SIV infection in long-tailed macaques if initiated within 24 hours after exposure and continued for 28 days. In a study, all 10 macaques that started PEP at 4 or 24 hours post-inoculation remained SIV-uninfected at 36–56 weeks post-inoculation. In contrast, all 10 macaques that did not receive any prophylaxis became SIV infected within 20–36 weeks post-inoculation. Another study with 24 macaques found that tenofovir was less effective if initiated 48 or 72 hours post-exposure or if continued for only 3 or 10 days.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 14
+  },
+  {
+    "category": "simple",
+    "lang": "en",
+    "question": "What does nPEP stand for in the context of HIV guidelines?",
+    "reference": "nPEP stands for nonoccupational postexposure prophylaxis. It is a treatment protocol used to prevent HIV infection after potential exposure to the virus in non-occupational settings. This could include exposure through sexual contact or needle sharing. The guidelines provide specific recommendations for the use of nPEP based on the type of exposure and the risk of HIV transmission. Understanding the definition and application of nPEP is crucial for healthcare providers managing potential HIV exposures.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 6
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "How does adherence to nPEP regimens compare between TDF/FTC with or without RAL and ZDV/3TC with a RTV-boosted PI among MSM?",
+    "reference": "Adherence to nPEP regimens among MSM was superior for those using a fixed-dose combination containing Tenofovir Disoproxil Fumarate/Emtricitabine (TDF/FTC) with or without Raltegravir (RAL) compared to those using Zidovudine/Lamivudine (ZDV/3TC) with a Ritonavir (RTV)-boosted protease inhibitor (PI). Specifically, adherence rates for the TDF-containing regimens were 57% with RAL and 72.7% without RAL, whereas the PI-containing regimen had an adherence rate of 46%. Additionally, in the TDF/FTC/RAL arm, 57% reported taking their medications as directed, but 27% sometimes missed their second daily dose of RAL. This suggests that TDF/FTC regimens may be more favorable in terms of adherence compared to ZDV/3TC with a RTV-boosted PI.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 19
+  },
+  {
+    "category": "complex",
+    "lang": "en",
+    "question": "What are the considerations and outcomes associated with the use of Nevirapine (NVP) in post-exposure prophylaxis (PEP) regimens according to the guidelines?",
+    "reference": "The guidelines advise against the use of Nevirapine (NVP) in post-exposure prophylaxis (PEP) regimens due to reports of serious side effects such as nephrolithiasis and hepatitis, and rare cases of severe hepatotoxicity. One notable case involved a female healthcare worker who required a liver transplantation after taking occupational PEP (oPEP) with NVP. Since January 2001, product labeling for NVP has contraindicated its use in PEP regimens. A retrospective study in western Kenya involving 296 patients showed that the proportion of patients reporting side effects did not differ substantially between those receiving NVP-containing regimens and those receiving other regimens, with common side effects including epigastric pain, skin rash, and nausea.",
+    "source_file": "cdc-hiv-npep-guidelines.pdf",
+    "source_page": 15
+  }
+]

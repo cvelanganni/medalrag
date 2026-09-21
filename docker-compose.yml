@@ -1,0 +1,53 @@
+services:
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant_lmph
+    ports:
+      - "127.0.0.1:6333:6333"
+    environment:
+      - QDRANT__SERVICE__API_KEY=${QDRANT_API_KEY}
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_lmph
+    ports:
+      - "127.0.0.1:11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    restart: unless-stopped
+
+  neo4j:
+    image: neo4j:5.13
+    container_name: neo4j_lmph
+    ports:
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD}
+      - NEO4J_PLUGINS=["apoc"]
+    volumes:
+      - neo4j_data:/data
+    restart: unless-stopped
+
+  infinity:
+    image: michaelf34/infinity:latest
+    container_name: infinity_reranker
+    ports:
+      - "127.0.0.1:7997:7997"
+    command: >
+      v2
+      --model-id BAAI/bge-reranker-v2-m3
+      --dtype float16
+      --batch-size 32
+      --engine torch
+      --port 7997
+    restart: unless-stopped
+
+volumes:
+  qdrant_storage:
+  ollama_models:
+  neo4j_data:
