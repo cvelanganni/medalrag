@@ -11,9 +11,9 @@ Built during a research internship at the [MEDAL Lab](https://medal.ctb.upm.es),
 
 A clinician types a question about an HIV patient. MedalRAG:
 
-1. **Guards** the input , rejects out-of-scope queries
+1. **Guards** the input, rejects out-of-scope queries
 2. **Retrieves** relevant passages from US (NIH/HHS) and Spanish (GESIDA) guidelines using hybrid BM25 + dense search with query expansion
-3. **Explores** a biomedical knowledge graph (2,569 nodes, 5,371 edges) via PathRAG and HippoRAG Personalized PageRank
+3. **Explores** a biomedical knowledge graph (~2,500 nodes, ~5,000 edges depending on the guidelines used) via PathRAG and HippoRAG Personalized PageRank
 4. **Re-ranks** passages with a cross-encoder
 5. **Generates** a structured response (NIH/HHS vs GESIDA side by side) with page-level citations, using GPT-4o, Claude, or DeepSeek
 6. **Replies in the query language**, if the clinician asks in French, the response is in French; in Spanish, it is in Spanish; and so on
@@ -110,10 +110,10 @@ medalRAG/
 ├── golden_dataset_expert.json  # Expert-annotated complex cases
 ├── golden_dataset_short/medium/long.json  # Sensitivity analysis datasets
 │
-├── docker-compose.yml          # Qdrant + Neo4j + PostgreSQL
+├── docker-compose.yml          # Qdrant + Neo4j + Ollama + Infinity reranker
 ├── pyproject.toml              # Dependencies (uv)
 ├── .env.example                # Environment variables template
-└── .python-version             # Python 3.12
+└── .python-version             # Python 3.13
 ```
 
 ---
@@ -122,9 +122,9 @@ medalRAG/
 
 | Tool | Version | Purpose |
 |---|---|---|
-| Python | 3.12 | Runtime |
+| Python | 3.13 | Runtime |
 | [uv](https://docs.astral.sh/uv/) | latest | Package manager |
-| [Docker](https://www.docker.com/) | latest | Qdrant + Neo4j + PostgreSQL |
+| [Docker](https://www.docker.com/) | latest | Qdrant + Neo4j + Ollama + Infinity reranker |
 | [Ollama](https://ollama.com/) | latest | Local BGE-M3 embeddings |
 | OpenAI API key | — | Generation, NER, triplet extraction |
 
@@ -161,7 +161,9 @@ DATABASE_URL=postgresql://user:password@localhost:5432/medalrag
 docker compose up -d
 ```
 
-This starts Qdrant on `localhost:6333`, Neo4j on `localhost:7474`, and PostgreSQL on `localhost:5432`.
+This starts Qdrant on `localhost:6333`, Neo4j on `localhost:7474`,
+Ollama on `localhost:11434`, and Infinity reranker on `localhost:7997`.
+PostgreSQL must be set up separately and configured via DATABASE_URL in .env.
 
 ### 4. Pull the embedding model
 
@@ -180,9 +182,28 @@ data/es/    → GESIDA guidelines   (https://gesida-seimc.org/guias-clinicas/)
 
 The pipeline was built with these documents:
 
-**English (NIH/HHS):** `guidelines-adult-adolescent-arv.pdf`, `guidelines-adult-adolescent-oi.pdf`, `guidelines-pediatric-arv.pdf`, `guidelines-pediatric-oi.pdf`, `guidelines-perinatal.pdf`, `cdc-hiv-npep-guidelines.pdf`, `who-guidelines-tuberculosis.pdf`, `who-guidelines-hepatitis-B-and-C.pdf`
-
-**Spanish (GESIDA):** `GuiaGeSIDA...TratamientoAntirretroviral.pdf`, `gesida_TB_en_VIH.pdf`, `gesida_VIH_embarazo.pdf`, and other GESIDA consensus documents.
+**English (NIH/HHS + WHO):**
+- [Adult & Adolescent ARV Guidelines](https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-arv)
+- [Adult & Adolescent OI Guidelines](https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection)
+- [Pediatric ARV Guidelines](https://clinicalinfo.hiv.gov/en/guidelines/pediatric-arv)
+- [Pediatric OI Guidelines](https://clinicalinfo.hiv.gov/en/guidelines/pediatric-opportunistic-infection)
+- [Perinatal Guidelines](https://clinicalinfo.hiv.gov/en/guidelines/perinatal)
+- [CDC NPEP Guidelines](https://stacks.cdc.gov/view/cdc/38856)
+- [WHO Tuberculosis Guidelines](https://www.who.int/publications/i/item/9789240007048)
+- [WHO Hepatitis B & C Guidelines](https://www.who.int/publications/i/item/9789241549981)
+- [WHO Contraceptive Eligibility for Women with HIV](https://www.who.int/publications/i/item/9789241549172)
+- [HIV Glossary EN](https://clinicalinfo.hiv.gov/sites/g/files/mnhszr391/files/glossary/Glossary-English_HIVinfo.pdf)
+- [HIV Glossary ES](https://clinicalinfo.hiv.gov/sites/g/files/mnhszr391/files/glossary/Glossary-Spanish_HIVinfo.pdf)
+  
+**Spanish (GESIDA):**
+- [Guía TAR Adultos (2022)](https://gesida-seimc.org/guias-clinicas/)
+- [Documento TB en VIH](https://gesida-seimc.org/guias-clinicas/)
+- [Documento VIH y Embarazo](https://gesida-seimc.org/guias-clinicas/)
+- [Documento Adherencia (2020)](https://gesida-seimc.org/guias-clinicas/)
+- [Documento Riesgo Cardiovascular en VIH](https://gesida-seimc.org/guias-clinicas/)
+- [Documento Profilaxis Postexposición VIH/VHB/VHC](https://gesida-seimc.org/guias-clinicas/)
+- [Documento Salud Pública y VIH](https://gesida-seimc.org/guias-clinicas/)
+- [Documento Alteraciones Neurológicas](https://gesida-seimc.org/guias-clinicas/)
 
 ---
 
@@ -207,10 +228,10 @@ uv run build_pipeline.py --no-contextual
 Expected output after a full build:
 ```
 ✓ Build complete!
-  EN chunks  : 9806
-  ES chunks  : 1415
-  Graph nodes: 2569
-  Graph edges: 5371
+  EN chunks  : ~9800  (varies with guidelines used)
+  ES chunks  : ~1400  (varies with guidelines used)
+  Graph nodes: ~2500  (varies with guidelines used)
+  Graph edges: ~5000  (varies with guidelines used)
 ```
 
 ---
@@ -246,6 +267,27 @@ All pipeline components can be toggled from the UI settings panel:
 | Cross-Encoder Reranker | Re-ranking with ms-marco-MiniLM |
 | GESIDA Guidelines | Spanish guidelines in retrieval |
 | HyDE | Hypothetical Document Embedding |
+
+### Docker services
+
+The `docker-compose.yml` starts four services:
+
+| Service | Container | Port | Purpose |
+|---|---|---|---|
+| Qdrant | `qdrant_lmph` | `6333` | Vector database for chunk storage and semantic search |
+| Ollama | `ollama_lmph` | `11434` | Local model server (BGE-M3 embeddings, gemma3:1b router) |
+| Neo4j | `neo4j_lmph` | `7474` (HTTP), `7687` (Bolt) | Knowledge graph storage and visualization |
+| Infinity | `infinity_reranker` | `7997` | Cross-encoder re-ranking (BAAI/bge-reranker-v2-m3) |
+
+All services bind to `127.0.0.1` only and persist data in Docker volumes. After `docker compose up -d`:
+
+```bash
+# Pull embedding model into Ollama
+docker exec ollama_lmph ollama pull bge-m3
+
+# Neo4j browser (optional — interactive graph visualization)
+# Open http://localhost:7474, login: neo4j / your NEO4J_PASSWORD
+```
 
 ---
 
@@ -312,13 +354,13 @@ Three reformulations are generated via GPT-4o-mini, one using formal medical ter
 
 ### HyDE (Hypothetical Document Embeddings)
 
-For complex queries, the system generates a short hypothetical guideline passage before searching and averages its embedding with the query embedding. The idea, from Gao et al. (2022), [Precise Zero-Shot Dense Retrieval without Relevance Labels](https://arxiv.org/abs/2212.10496),is that "what a relevant passage would look like" is semantically closer to actual guideline passages than the raw clinical question. HyDE is activated only for queries classified as COMPLEX by the router.
+For complex queries, the system generates a short hypothetical guideline passage before searching and averages its embedding with the query embedding. The idea, from Gao et al. (2022), [Precise Zero-Shot Dense Retrieval without Relevance Labels](https://arxiv.org/abs/2212.10496), is that "what a relevant passage would look like" is semantically closer to actual guideline passages than the raw clinical question. HyDE is activated only for queries classified as COMPLEX by the router.
 
 **Limitation.** HyDE relies on GPT-4o-mini generating a plausible passage, which can introduce hallucinated dosages or drug names. In a safety-critical setting, this is a non-trivial risk. A domain-specific model fine-tuned on guideline-style text would reduce this risk.
 
 ### Knowledge graph and triplet extraction
 
-Medical triplets (subject, relation, object) are extracted from each clinical chunk using GPT-4o-mini, then validated by PubMedBERT NER. The resulting graph (2,569 nodes, 5,371 edges) is stored in NetworkX for computation and synced to Neo4j for interactive visualization. This approach is inspired by [MedGraphRAG (Wu et al., 2024)](https://arxiv.org/abs/2408.04187) and [MedRAG (Zhao et al., 2025)](https://arxiv.org/abs/2502.04413), which both demonstrate that knowledge graphs substantially improve reasoning on multi-step clinical questions such as drug-drug interactions or co-infection management.
+Medical triplets (subject, relation, object) are extracted from each clinical chunk using GPT-4o-mini, then validated by PubMedBERT NER. The resulting graph (~2,500 nodes, ~5,000 edges depending on the guidelines used) is stored in NetworkX for computation and synced to Neo4j for interactive visualization. This approach is inspired by [MedGraphRAG (Wu et al., 2024)](https://arxiv.org/abs/2408.04187) and [MedRAG (Zhao et al., 2025)](https://arxiv.org/abs/2502.04413), which both demonstrate that knowledge graphs substantially improve reasoning on multi-step clinical questions such as drug-drug interactions or co-infection management.
 
 **Limitation.** GPT-4o-mini sometimes extracts sentence fragments as entities ("patients with renal impairment") rather than clean concepts ("Renal impairment"). The `is_valid_entity` filter and `ENTITY_CANONICAL_MAP` mitigate this, but ~15% of extracted triplets are filtered out as noise. A fine-tuned NER model trained specifically on HIV terminology would improve precision.
 
@@ -350,7 +392,7 @@ GESIDA guidelines are retrieved in Spanish alongside NIH/HHS in English. The BGE
 
 The ablation study uses a golden dataset of 35 question-reference pairs (simple and complex, EN and ES), evaluated by three LLM evaluators (GPT-4o-mini, Claude Haiku, DeepSeek) using [RAGAs (Es et al., 2023)](https://arxiv.org/abs/2309.15217). MIRAGE (HIV-specific MCQs) provides a complementary clinical utility score.
 
-**Limitation.** n=35 is a small evaluation set. Statistical tests (paired t-test, Wilcoxon, bootstrap CI) consistently show that gains between pipeline versions (v1 → v9: CR +0.020) are not statistically significant at p < 0.05. The non-determinism of LLM evaluators adds further variance — the same pipeline scores CR=0.865 with GPT-4o-mini, CR=0.752 with Claude Haiku, and CR=0.709 with DeepSeek. These evaluation variance issues are inherent to LLM-as-judge frameworks and are not specific to MedalRAG. A larger dataset and clinician-based evaluation would provide more reliable conclusions.
+**Limitation.** n=35 is a small evaluation set. Statistical tests (paired t-test, Wilcoxon, bootstrap CI) consistently show that gains between pipeline versions (v1 → v9: CR +0.020) are not statistically significant at p < 0.05. The non-determinism of LLM evaluators adds further variance, the same pipeline scores CR=0.865 with GPT-4o-mini, CR=0.752 with Claude Haiku, and CR=0.709 with DeepSeek. These evaluation variance issues are inherent to LLM-as-judge frameworks and are not specific to MedalRAG. A larger dataset and clinician-based evaluation would provide more reliable conclusions.
 
 ---
 
@@ -396,17 +438,17 @@ The ablation study uses a golden dataset of 35 question-reference pairs (simple 
 
 ---
 
-## Citation
+## Acknowledgements
 
-```bibtex
-@misc{velanganni2026medalrag,
-  author  = {Cyrille Velanganni},
-  title   = {MedalRAG: A Hybrid RAG System for HIV Clinical Decision Support},
-  year    = {2026},
-  url     = {https://github.com/cvelanganni/medalrag},
-  note    = {Research internship — MEDAL Lab, CTB-UPM, Madrid}
-}
-```
+This project was developed during a 4-month research internship at the MEDAL Lab, Centro de Tecnología Biomédica, Universidad Politécnica de Madrid (April–August 2026).
+
+Special thanks to:
+
+- **Ernestina Menasalvas Ruiz**, research supervisor and lab director, for her guidance and scientific direction throughout the internship
+- **Borja Jordán de Urríes Ruiz**, for his technical feedback and support during the development
+- **Víctor Rodríguez Melgar**, for his contributions to implementation reviews and progress discussions
+- **David Gómez Ortiz**, for his valuable advice and discussions throughout the project
+- The entire **MEDAL Lab team**, for welcoming me into the lab and providing a stimulating research environment
 
 ---
 
