@@ -34,3 +34,4 @@ htmlcov/
 
 # Keep golden datasets
 !golden_dataset*.json
+.files/
