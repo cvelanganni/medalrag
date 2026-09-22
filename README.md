@@ -1,372 +1,414 @@
-# MedalRAG — HIV Clinical Decision Support Assistant
+# MedalRAG
 
-> A hybrid GraphRAG system for HIV/AIDS clinical guideline querying,
-> combining NIH/HHS (EN) and GESIDA (ES) guidelines with knowledge
-> graph reasoning, bilingual support, and clinical contradiction detection.
+**Hybrid RAG chatbot for HIV clinical decision support.**  
+MedalRAG retrieves passages from NIH/HHS and GESIDA guidelines, reasons over a biomedical knowledge graph, and generates structured, sourced responses in the language of the query (English, Spanish, French, or any other language).
 
-**CTB-UPM Madrid — Internship Project 2026**
+Built during a research internship at the [MEDAL Lab](https://medal.ctb.upm.es), CTB-UPM, Madrid (April–August 2026).
 
 ---
 
-## Overview
+## What it does
 
-MedalRAG is a Retrieval-Augmented Generation (RAG) system designed to
-assist physicians with HIV/AIDS clinical decision-making. It queries
-official clinical guidelines in English (NIH/HHS) and Spanish (GESIDA)
-and returns structured, source-cited recommendations.
+A clinician types a question about an HIV patient. MedalRAG:
 
-### Key Features
+1. **Guards** the input , rejects out-of-scope queries
+2. **Retrieves** relevant passages from US (NIH/HHS) and Spanish (GESIDA) guidelines using hybrid BM25 + dense search with query expansion
+3. **Explores** a biomedical knowledge graph (2,569 nodes, 5,371 edges) via PathRAG and HippoRAG Personalized PageRank
+4. **Re-ranks** passages with a cross-encoder
+5. **Generates** a structured response (NIH/HHS vs GESIDA side by side) with page-level citations, using GPT-4o, Claude, or DeepSeek
+6. **Replies in the query language**, if the clinician asks in French, the response is in French; in Spanish, it is in Spanish; and so on
 
-- **Bilingual EN/ES** — queries and answers in English or Spanish
-- **Hybrid search** — BM25 + dense semantic search via Qdrant
-- **Knowledge Graph** — Neo4j graph with 7,000+ medical entities
-- **GraphRAG pipeline** — PathRAG + PPR HippoRAG multi-hop reasoning
-- **UMLS normalization** — entity deduplication via CUI identifiers
-- **Cross-encoder reranker** — BGE/ms-marco reranking
-- **Query expansion** — multiple reformulations via RRF fusion
-- **Contradiction detection** — alerts when EN and ES guidelines differ
-- **Multi-patient profiles** — persistent conversations per patient
-- **LangSmith tracing** — optional pipeline visualization
+**Benchmark results** (GPT-4o-mini evaluator, n=35):
 
-### Architecture
+| Metric | Score |
+|---|---|
+| Context Recall | **0.865** |
+| Faithfulness | **0.722** |
+| MIRAGE (HIV MCQs) | **80%** (16/20) |
+
+---
+
+## Architecture
 
 ```
-PDF Guidelines (EN + ES)
-        ↓
-    Chunking + Section Classification
-        ↓
-   ┌────┴────┐
-   ↓         ↓
-Qdrant      Neo4j Knowledge Graph
-(dense +    (PathRAG + PPR HippoRAG)
- sparse)         ↓ UMLS CUI normalization
-   ↓
-Hybrid Search + Query Expansion
-        ↓
-Cross-Encoder Reranking
-        ↓
-LLM Generation (GPT-4o / Claude / Ollama)
-        ↓
-Streamlit Interface
+                    ┌─────────────────────────────────┐
+                    │           Chainlit UI           │
+                    └────────────────┬────────────────┘
+                                     │ question (any language)
+                    ┌────────────────▼────────────────┐
+                    │    Agent 1 — Clinical Guardrail │
+                    │    (GPT-4o-mini, JSON mode)     │
+                    └────────────────┬────────────────┘
+                                     │
+              ┌──────────────────────┼────────────────────┐
+              │                      │                    │
+   ┌──────────▼─────────┐ ┌──────────▼─────────┐ ┌────────▼────────┐
+   │  Hybrid Search EN  │ │  Hybrid Search ES  │ │   GraphRAG      │
+   │  BM25 + BGE-M3     │ │  BM25 + BGE-M3     │ │  PathRAG + PPR  │
+   │  + Query Expansion │ │  + Query Expansion │ │  Neo4j / NX     │
+   └──────────┬─────────┘ └──────────┬─────────┘ └─────────┬───────┘
+              │                      │                     │
+              └──────────────────────┼─────────────────────┘
+                                     │
+                    ┌────────────────▼────────────────┐
+                    │  Cross-encoder Re-ranker        │
+                    │  (ms-marco-MiniLM-L-6-v2)       │
+                    └────────────────┬────────────────┘
+                                     │
+                    ┌────────────────▼────────────────┐
+                    │    Agent 2 — Grounding Check    │
+                    └────────────────┬────────────────┘
+                                     │
+                    ┌────────────────▼────────────────┐
+                    │    LLM Generation               │
+                    │    GPT-4o / Claude / DeepSeek   │
+                    └────────────────┬────────────────┘
+                                     │
+                    ┌────────────────▼────────────────┐
+                    │  Structured response + sources  │
+                    │  NIH/HHS ↔ GESIDA + PDF pages   │
+                    └─────────────────────────────────┘
 ```
 
 ---
 
-## Requirements
+## Repository structure
 
-- **Docker Desktop** — for Qdrant, Neo4j, Ollama
-- **Python 3.12+**
-- **uv** package manager
-- **~15GB disk space** — models + indexed data
-- **OpenAI API key** — with ~$5 credit for initial indexing
-- GPU recommended for Ollama inference (CPU works but slower)
+```
+medalRAG/
+├── app.py                      # Chainlit interface — main entry point
+├── build_pipeline.py           # Indexing pipeline (Qdrant + Neo4j)
+├── enrich_graph.py             # Optional: UMLS CUI enrichment
+├── evaluate.py                 # Ablation study & RAGAs benchmark
+├── evaluate_mirage.py          # MIRAGE HIV benchmark
+│
+├── core/
+│   ├── graph/
+│   │   ├── builder.py          # Triplet extraction, entity normalization
+│   │   ├── pathrag.py          # PathRAG relational path pruning
+│   │   ├── hipporag_ppr.py     # HippoRAG Personalized PageRank
+│   │   └── neo4j_sync.py       # Sync NetworkX → Neo4j
+│   ├── retrieval/
+│   │   ├── hybrid_search.py    # BM25 + Dense + RRF fusion
+│   │   ├── query_expansion.py  # Query expansion + RRF
+│   │   ├── reranker.py         # Cross-encoder re-ranking
+│   │   ├── router.py           # Query complexity classifier
+│   │   └── graph_search.py     # Neo4j graph search helpers
+│   └── ingestion/
+│       ├── loader.py           # PDF loading, chunking, noise filtering
+│       ├── ner_en.py           # NER for English (GPT-4o-mini)
+│       ├── ner_es.py           # NER for Spanish (fallback to EN)
+│       └── glossary_parser.py  # NIH HIV glossary parser (v2 perspective)
+│
+├── tests/                      # Pytest test suite (9 tests)
+├── scripts/                    # Utility scripts
+├── evaluations/                # Benchmark results (JSON + PNG)
+├── lib/                        # vis-network for graph visualization
+├── public/                     # Chainlit static assets
+│
+├── golden_dataset_v2.json      # Official evaluation dataset (35 Q&A pairs)
+├── golden_dataset_expert.json  # Expert-annotated complex cases
+├── golden_dataset_short/medium/long.json  # Sensitivity analysis datasets
+│
+├── docker-compose.yml          # Qdrant + Neo4j + PostgreSQL
+├── pyproject.toml              # Dependencies (uv)
+├── .env.example                # Environment variables template
+└── .python-version             # Python 3.12
+```
 
 ---
 
-## Quick Start
+## Prerequisites
 
-### 1. Clone the repository
+| Tool | Version | Purpose |
+|---|---|---|
+| Python | 3.12 | Runtime |
+| [uv](https://docs.astral.sh/uv/) | latest | Package manager |
+| [Docker](https://www.docker.com/) | latest | Qdrant + Neo4j + PostgreSQL |
+| [Ollama](https://ollama.com/) | latest | Local BGE-M3 embeddings |
+| OpenAI API key | — | Generation, NER, triplet extraction |
+
+---
+
+## Setup
+
+### 1. Clone and install dependencies
 
 ```bash
-git clone https://github.com/your_lab/medalrag.git
+git clone https://github.com/cvelanganni/medalrag.git
 cd medalrag
+uv sync
 ```
 
-### 2. Configure environment variables
+### 2. Configure environment
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` and fill in at minimum:
-
+Fill in `.env` — at minimum:
 ```
-OPENAI_API_KEY=sk-...   # required
+OPENAI_API_KEY=sk-...
+NEO4J_PASSWORD=your_password
+AUTH_PASSWORD=your_password
+CHAINLIT_AUTH_SECRET=   # python -c "import secrets; print(secrets.token_hex(32))"
+DATABASE_URL=postgresql://user:password@localhost:5432/medalrag
 ```
 
 ### 3. Start Docker services
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
-Verify all services are running:
+This starts Qdrant on `localhost:6333`, Neo4j on `localhost:7474`, and PostgreSQL on `localhost:5432`.
+
+### 4. Pull the embedding model
 
 ```bash
-docker ps
-# Expected: qdrant_lmph, neo4j_lmph, ollama_lmph
+ollama pull bge-m3
 ```
 
-### 4. Install Python dependencies
+### 5. Download guidelines
 
-```bash
-pip install uv      # if not already installed
-uv sync
-```
-
-### 5. Download Ollama models
-
-```bash
-# Embeddings model (required)
-docker exec ollama_lmph ollama pull mxbai-embed-large
-
-# Router model (required)
-docker exec ollama_lmph ollama pull gemma3:1b
-
-# Local LLM (optional — for offline generation)
-docker exec ollama_lmph ollama pull gemma3:12b-it-qat
-```
-
-### 6. Add your guidelines
-
-Place your PDF guidelines in the appropriate folders:
+Place PDF files in the following directories:
 
 ```
-data/
-├── en/          ← NIH/HHS English guidelines (PDF)
-├── es/          ← GESIDA Spanish guidelines (PDF)
-└── glossary/    ← NIH HIV glossary EN + ES (PDF)
+data/en/    → NIH/HHS guidelines  (https://clinicalinfo.hiv.gov/en/guidelines)
+data/es/    → GESIDA guidelines   (https://gesida-seimc.org/guias-clinicas/)
 ```
 
-> **Note:** Guidelines are not included in this repository due to
-> copyright. Download them from:
->
-> - **EN:** https://clinicalinfo.hiv.gov/en/guidelines
-> - **ES:** https://www.gesida-seimc.org/guias-clinicas/
+The pipeline was built with these documents:
 
-### 7. Build the pipeline (one-time, ~1 hour)
+**English (NIH/HHS):** `guidelines-adult-adolescent-arv.pdf`, `guidelines-adult-adolescent-oi.pdf`, `guidelines-pediatric-arv.pdf`, `guidelines-pediatric-oi.pdf`, `guidelines-perinatal.pdf`, `cdc-hiv-npep-guidelines.pdf`, `who-guidelines-tuberculosis.pdf`, `who-guidelines-hepatitis-B-and-C.pdf`
 
-```bash
-# Full pipeline (recommended)
-uv run build_pipeline.py
-
-# Without LLM contextualization (faster, ~20 min)
-uv run build_pipeline.py --no-contextual
-
-# Qdrant only — skip graph rebuild
-uv run build_pipeline.py --skip-graph
-```
-
-### 8. Launch the interface
-
-```bash
-uv run streamlit run app.py
-```
-
-Open your browser at `http://localhost:8501`
+**Spanish (GESIDA):** `GuiaGeSIDA...TratamientoAntirretroviral.pdf`, `gesida_TB_en_VIH.pdf`, `gesida_VIH_embarazo.pdf`, and other GESIDA consensus documents.
 
 ---
 
-## Optional Setup
+## Build the pipeline
 
-### UMLS Entity Normalization
-
-Improves graph quality by mapping entity variants to UMLS CUI identifiers
-(e.g. "DTG", "Dolutegravir", "Tivicay" → CUI C3889366).
-
-1. Create a free account at https://uts.nlm.nih.gov/uts/signup-login
-2. Add your key to `.env`: `UMLS_API_KEY=your_key`
-3. Run the enrichment script:
+Run once to index all guidelines and build the knowledge graph.
 
 ```bash
-uv run enrich_graph.py
+# Full pipeline — Qdrant + graph (~$1 in API costs for LLM contextualization)
+uv run build_pipeline.py
+
+# Graph only (skip Qdrant re-indexing)
+uv run build_pipeline.py --skip-qdrant
+
+# Qdrant only (skip graph building)
+uv run build_pipeline.py --skip-graph
+
+# Disable LLM contextualization (faster, cheaper, slightly lower quality)
+uv run build_pipeline.py --no-contextual
 ```
 
-### LangSmith Tracing
+Expected output after a full build:
+```
+✓ Build complete!
+  EN chunks  : 9806
+  ES chunks  : 1415
+  Graph nodes: 2569
+  Graph edges: 5371
+```
 
-Visualize pipeline calls and trace each query step-by-step.
+---
 
-1. Create a free account at https://smith.langchain.com
-2. Add your key to `.env`: `LANGCHAIN_API_KEY=ls__...`
-3. Set: `LANGCHAIN_TRACING_V2=true`
+## Run the app
+
+```bash
+uv run chainlit run app.py
+```
+
+Open `http://localhost:8000` and log in with the credentials set in `.env`.
+
+### Patient commands
+
+```
+/new_patient Sofia | 32 | 450 | 85000 | HIV+ naive HBsAg+ eGFR 58
+/select
+/delete_patient
+```
+
+### Pipeline settings
+
+All pipeline components can be toggled from the UI settings panel:
+
+| Toggle | Description |
+|---|---|
+| LLM Engine | GPT-4o, Claude Sonnet, DeepSeek |
+| Hybrid BM25 + Dense | Hybrid search with RRF fusion |
+| Query Expansion | 3 reformulations per query via GPT-4o-mini |
+| GraphRAG + Neo4j | Knowledge graph retrieval |
+| PathRAG Pruning | Relational path filtering |
+| HippoRAG PPR | Personalized PageRank for multi-hop reasoning |
+| Cross-Encoder Reranker | Re-ranking with ms-marco-MiniLM |
+| GESIDA Guidelines | Spanish guidelines in retrieval |
+| HyDE | Hypothetical Document Embedding |
 
 ---
 
 ## Evaluation
 
-Run the ablation study benchmark (RAGAs metrics):
+### RAGAs ablation study
 
 ```bash
-# Quick mode — 4 versions, ~30 min
-uv run evaluate.py --quick --sleep 15
+# Full ablation (v1 → v9), ~2h, ~$5 in API costs
+uv run evaluate.py
 
-# Full ablation — 10 versions, ~2 hours
-uv run evaluate.py --sleep 15
+# Quick mode (v1, v3, v8, v9 only)
+uv run evaluate.py --quick
 
-# Specific versions only
-uv run evaluate.py --versions v1_semantic_baseline v9_hybrid
+# Specific versions with a custom evaluator
+uv run evaluate.py --versions v1_semantic_baseline v9_hybrid --evaluator gpt4o-mini
+
+# Available evaluators: deepseek, gpt4o-mini, gpt4o, claude-haiku, claude-sonnet
 ```
 
-Results are saved in `evaluations/` as JSON files and matplotlib figures.
+### MIRAGE benchmark
 
----
-
-## Project Structure
-
+```bash
+uv run evaluate_mirage.py --dataset mirage_hiv_strict.json --max 20
 ```
-medalRAG/
-├── app.py                      ← Streamlit interface
-├── evaluate.py                 ← RAGAs benchmark + ablation study
-├── build_pipeline.py           ← Data ingestion + indexing
-├── enrich_graph.py             ← UMLS graph enrichment
-├── generate_golden_dataset.py  ← Golden dataset generator
-├── entity_normalization.py     ← Entity canonical names
-├── .env.example                ← Environment template
-├── docker-compose.yml          ← Docker services
-├── pyproject.toml              ← Python dependencies
-│
-├── data/
-│   ├── en/                     ← NIH/HHS guidelines (PDF)
-│   ├── es/                     ← GESIDA guidelines (PDF)
-│   └── glossary/               ← NIH HIV glossary EN + ES
-│
-├── core/
-│   ├── ingestion/
-│   │   ├── loader.py           ← PDF loading + chunking
-│   │   ├── glossary_parser.py  ← Glossary parsing
-│   │   ├── ner_en.py           ← English NER
-│   │   ├── ner_es.py           ← Spanish NER (BETO/XLM-R)
-│   │   └── umls_normalizer.py  ← UMLS normalization
-│   ├── graph/
-│   │   ├── builder.py          ← Triplet extraction
-│   │   ├── neo4j_sync.py       ← Neo4j synchronization
-│   │   ├── pathrag.py          ← PathRAG filtering
-│   │   └── hipporag_ppr.py     ← Personalized PageRank
-│   └── retrieval/
-│       ├── router.py           ← SIMPLE/COMPLEX classifier
-│       ├── vector_search.py    ← Qdrant search
-│       ├── hybrid_search.py    ← BM25 + Dense + RRF
-│       ├── query_expansion.py  ← Query reformulation + RRF
-│       ├── reranker.py         ← Cross-encoder reranking
-│       └── contradiction_detector.py
-│
-├── patients/                   ← Patient profiles (local, git-ignored)
-├── conversations/              ← Conversation history (local, git-ignored)
-└── evaluations/                ← Benchmark results + plots (git-ignored)
+
+### Run tests
+
+```bash
+uv run pytest tests/ -v
 ```
 
 ---
 
-## Pipeline Components
+## Optional: UMLS graph enrichment
 
-| Component        | Implementation             | Purpose              |
-| ---------------- | -------------------------- | -------------------- |
-| Embedding        | mxbai-embed-large (Ollama) | Chunk vectorization  |
-| Vector DB        | Qdrant (Docker)            | Semantic search      |
-| Sparse search    | BM25 (rank-bm25)           | Lexical matching     |
-| Reranker         | ms-marco-MiniLM-L-6-v2     | Top-K refinement     |
-| Knowledge Graph  | Neo4j (Docker)             | Entity relations     |
-| Graph algorithms | PathRAG + HippoRAG PPR     | Multi-hop reasoning  |
-| Entity linking   | UMLS API                   | Deduplication        |
-| LLM (generator)  | GPT-4o / Claude / Ollama   | Response generation  |
-| LLM (router)     | gemma3:1b (Ollama)         | Query classification |
-| Evaluator        | DeepSeek-chat              | RAGAs metrics        |
-| Interface        | Streamlit                  | Clinical UI          |
+Enriches graph nodes with UMLS CUI codes and merges duplicates. Requires a free key from [https://uts.nlm.nih.gov](https://uts.nlm.nih.gov).
+
+```bash
+# Add to .env: UMLS_API_KEY=your_key
+uv run enrich_graph.py
+
+# Replace main graph with enriched version
+cp graph_cache_umls.pkl graph_cache.pkl
+```
 
 ---
 
-## RAGAs Benchmark Results
+## Implementation choices and critique
 
-Evaluated on 35 bilingual questions (EN + ES) across 10 pipeline versions:
+This section explains each major architectural decision, its motivation, and its limitations honestly.
 
-| Version               | Context Recall | Faithfulness | Factual Correctness | Average |
-| --------------------- | :------------: | :----------: | :-----------------: | :-----: |
-| v1 Semantic baseline  |     0.550      |    0.695     |        0.258        |  0.501  |
-| v3 +GraphRAG          |     0.675      |    0.716     |        0.275        |  0.555  |
-| v6 +Cross-encoder     |     0.600      |    0.689     |        0.282        |  0.524  |
-| v8 Full pipeline      |     0.675      |    0.711     |        0.261        |  0.549  |
-| v9 +Hybrid BM25+Dense |     0.650      |    0.736     |        0.220        |  0.535  |
+### Hybrid BM25 + Dense search with RRF
 
-> **Note:** Faithfulness of 0.711 exceeds the SIGIR 2025 LiveRAG Challenge
-> 3rd-place system (Faithfulness = 0.55), validating our approach on
-> a challenging medical domain.
+The retrieval combines sparse BM25 and dense BGE-M3 embeddings fused via Reciprocal Rank Fusion (Cormack et al., 2009). The motivation is straightforward: BM25 excels at exact drug name matching (e.g. "Dolutegravir", "TAF/FTC") while dense embeddings capture semantic context ("preferred in renal impairment" without the exact term). For a medical domain where acronyms and precise drug names are critical, neither alone is sufficient.
 
-### Score Breakdown by Language (v9 Full Pipeline)
+**Limitation.** The BM25 index is rebuilt in memory at startup, which adds a few seconds of latency on the first query. For a production system, a persistent BM25 index (e.g. Elasticsearch) would be more appropriate.
 
-| Category          | Context Recall | Faithfulness | Factual Correctness |
-| ----------------- | :------------: | :----------: | :-----------------: |
-| English questions |     0.538      |    0.734     |        0.185        |
-| Spanish questions |     0.857      |    0.740     |        0.283        |
+### Query expansion
+
+Three reformulations are generated via GPT-4o-mini, one using formal medical terminology, one focusing on pharmacological mechanisms, and one in clinical guideline style. Each reformulation searches independently and results are fused with RRF, giving the original query a 1.5× weight. This approach is directly inspired by the query expansion with prompting literature, and was one of the clearest contributors to Context Recall improvements in the ablation study.
+
+**Limitation.** Query expansion adds ~0.3s and one LLM call per query. For very short questions ("What is CD4?") the reformulations add little value and slightly increase cost.
+
+### HyDE (Hypothetical Document Embeddings)
+
+For complex queries, the system generates a short hypothetical guideline passage before searching and averages its embedding with the query embedding. The idea, from Gao et al. (2022), [Precise Zero-Shot Dense Retrieval without Relevance Labels](https://arxiv.org/abs/2212.10496),is that "what a relevant passage would look like" is semantically closer to actual guideline passages than the raw clinical question. HyDE is activated only for queries classified as COMPLEX by the router.
+
+**Limitation.** HyDE relies on GPT-4o-mini generating a plausible passage, which can introduce hallucinated dosages or drug names. In a safety-critical setting, this is a non-trivial risk. A domain-specific model fine-tuned on guideline-style text would reduce this risk.
+
+### Knowledge graph and triplet extraction
+
+Medical triplets (subject, relation, object) are extracted from each clinical chunk using GPT-4o-mini, then validated by PubMedBERT NER. The resulting graph (2,569 nodes, 5,371 edges) is stored in NetworkX for computation and synced to Neo4j for interactive visualization. This approach is inspired by [MedGraphRAG (Wu et al., 2024)](https://arxiv.org/abs/2408.04187) and [MedRAG (Zhao et al., 2025)](https://arxiv.org/abs/2502.04413), which both demonstrate that knowledge graphs substantially improve reasoning on multi-step clinical questions such as drug-drug interactions or co-infection management.
+
+**Limitation.** GPT-4o-mini sometimes extracts sentence fragments as entities ("patients with renal impairment") rather than clean concepts ("Renal impairment"). The `is_valid_entity` filter and `ENTITY_CANONICAL_MAP` mitigate this, but ~15% of extracted triplets are filtered out as noise. A fine-tuned NER model trained specifically on HIV terminology would improve precision.
+
+### PathRAG for triplet pruning
+
+Once raw triplets are retrieved from Neo4j, [PathRAG (Chen et al., 2025)](https://arxiv.org/abs/2502.14902) filters them to keep only triplets on shortest relational paths between seed entities. The intuition is that GraphRAG and LightRAG often return redundant neighborhood information that adds noise to the LLM context. PathRAG replaces this neighborhood expansion with a more surgical path-based selection, which reduces token consumption and improves response coherence.
+
+**Limitation.** The implementation here is a simplified version of the full PathRAG approach: flow-based pruning from the paper is approximated by shortest-path filtering with a confidence threshold. The original method uses a more sophisticated max-flow algorithm that was not re-implemented here. Safety-critical relations (INTERACTS_WITH, CONTRAINDICATED_IN) are always preserved regardless of the path score, which is a deliberate design choice for a clinical system.
+
+### HippoRAG 2 Personalized PageRank
+
+PPR propagates probability mass from seed entities outward through the knowledge graph, surfacing multi-hop connections that direct retrieval misses. For example, a query about "DTG + TB co-infection" seeds "Dolutegravir" and "Rifampin" as nodes, and PPR can surface the intermediate entity "UGT1A1 induction" that links them. This directly implements the neurobiologically inspired approach from [Gutierrez et al. (2025)](https://arxiv.org/abs/2502.14802), which outperforms standard RAG on multi-hop QA tasks by +7% on associative memory benchmarks.
+
+**Limitation.** The full HippoRAG 2 implementation includes dense-sparse integration (passage nodes in the graph), triple filtering via recognition memory, and query-to-triple linking. MedalRAG implements a simplified version: only phrase nodes are used as seeds, and triple filtering is handled by PathRAG rather than a dedicated LLM filter step. The gains in the ablation study (v4 → v5: CR +0.003) suggest the simplified version still adds signal, but the gains are modest and not statistically significant at n=35.
+
+### Cross-encoder re-ranking
+
+Retrieved chunks are re-ranked by a cross-encoder (ms-marco-MiniLM-L-6-v2) that scores (query, chunk) pairs jointly, rather than comparing embeddings independently. Cross-encoder re-ranking has been a standard practice since [Nogueira & Cho (2019)](https://arxiv.org/abs/1901.04085) and consistently improves precision at the cost of ~50ms latency for 15 chunks.
+
+**Limitation.** The ms-marco model is trained on web search data, not on medical text. A cross-encoder fine-tuned on HIV clinical question-passage pairs would likely improve ranking quality. This is flagged as a v2 improvement.
+
+### Multilingual retrieval (EN + ES)
+
+GESIDA guidelines are retrieved in Spanish alongside NIH/HHS in English. The BGE-M3 embedding model supports 100+ languages in a single embedding space, which enables cross-lingual semantic search without translation. The response is always generated in the language of the query, which is detected by the router and enforced in the system prompt.
+
+**Limitation.** The NER pipeline for Spanish falls back to the English PubMedBERT model. The BSC-TeMU RoBERTa model (PlanTL-GOB-ES/bsc-bio-ehr-es-pharmaconer), which was intended for Spanish biomedical NER, was not installed in this version. This means triplets extracted from Spanish chunks rely on an English model that may miss Spanish-specific medical terminology variants.
+
+### Evaluation design
+
+The ablation study uses a golden dataset of 35 question-reference pairs (simple and complex, EN and ES), evaluated by three LLM evaluators (GPT-4o-mini, Claude Haiku, DeepSeek) using [RAGAs (Es et al., 2023)](https://arxiv.org/abs/2309.15217). MIRAGE (HIV-specific MCQs) provides a complementary clinical utility score.
+
+**Limitation.** n=35 is a small evaluation set. Statistical tests (paired t-test, Wilcoxon, bootstrap CI) consistently show that gains between pipeline versions (v1 → v9: CR +0.020) are not statistically significant at p < 0.05. The non-determinism of LLM evaluators adds further variance — the same pipeline scores CR=0.865 with GPT-4o-mini, CR=0.752 with Claude Haiku, and CR=0.709 with DeepSeek. These evaluation variance issues are inherent to LLM-as-judge frameworks and are not specific to MedalRAG. A larger dataset and clinician-based evaluation would provide more reliable conclusions.
 
 ---
 
-## Supported Models
+## Tech stack
 
-### Generator (LLM)
-
-| Provider       | Models                                 |
-| -------------- | -------------------------------------- |
-| OpenAI         | gpt-4o, gpt-4o-mini                    |
-| Anthropic      | claude-sonnet-4-5, claude-haiku-4-5    |
-| Ollama (local) | gemma3:12b-it-qat, meditron, medllama2 |
-
-### Embeddings (Ollama local)
-
-| Model             | Dimensions | Purpose                        |
-| ----------------- | ---------- | ------------------------------ |
-| mxbai-embed-large | 1024       | Chunk + query vectorization    |
-| gemma3:1b         | —          | Query routing (SIMPLE/COMPLEX) |
+| Component | Technology |
+|---|---|
+| Interface | Chainlit + PostgreSQL |
+| Vector database | Qdrant |
+| Knowledge graph | NetworkX (PPR/PathRAG) + Neo4j (visualization) |
+| Embeddings | BGE-M3 (Ollama, local) |
+| LLM generation | GPT-4o / Claude Sonnet / DeepSeek |
+| NER | GPT-4o-mini + PubMedBERT (optional) |
+| Re-ranker | ms-marco-MiniLM-L-6-v2 |
+| Evaluation | RAGAs + MIRAGE |
+| Package manager | uv |
 
 ---
 
-## Roadmap
+## Perspectives
 
-Planned improvements for future versions:
-
-- [ ] **BGE-M3** — multilingual dense + sparse embedding in a single model
-- [ ] **BGE-Reranker-v2-m3** — multilingual cross-encoder reranker
-- [ ] **MedCAT** — local UMLS entity linking (replaces API calls)
-- [ ] **PubMedBERT NER** — specialized English medical NER
-- [ ] **BSC-TeMU RoBERTa** — specialized Spanish medical NER
-- [ ] **Neo4j CUI primary key** — 100% duplicate-free graph
-- [ ] **MedGraphRAG L2** — PubMed papers as intermediate graph layer
-- [ ] **Contextual Retrieval** — LLM-enriched chunk indexing
-
----
-
-## Clinical Safety Notice
-
-> ⚠️ **MedalRAG is a clinical decision support tool only.**
->
-> All recommendations must be validated by a qualified physician.
-> This system does not replace professional medical judgment.
-> Guidelines cited are from official NIH/HHS and GESIDA sources
-> but may not reflect the most recent updates.
->
-> **Not intended for direct patient use.**
+- **DrugBank integration** — structured pharmacological data for precise drug-drug interaction queries
+- **Structured PDF parser** — better extraction of dosing tables and recommendation grids from guidelines
+- **Spanish NER** — integrate BSC-TeMU RoBERTa (PlanTL-GOB-ES/bsc-bio-ehr-es-pharmaconer) for native Spanish biomedical entity extraction
+- **Clinical validation** — formal evaluation by HIV-specialist physicians (the most meaningful evaluator)
+- **Local deployment** — replace proprietary APIs with open-source models (Llama, Gemma) for GDPR-compliant use in clinical settings
+- **Extend to other diseases** — the pipeline is disease-agnostic; hepatitis B/C, tuberculosis, or oncology guidelines could be integrated with minimal changes
 
 ---
 
 ## References
 
-- Guo et al. (2024) — _LightRAG: Simple and Fast Retrieval-Augmented Generation_
-- Xiong et al. (2024) — _MedRAG: Benchmarking Retrieval-Augmented Generation for Biomedical NLP_
-- Gutierrez et al. (2025) — _HippoRAG 2: From Resource to Omnivore_
-- Chen et al. (2025) — _PathRAG: Pruning Graph-based RAG with Relational Paths_
-- CTB-UPM (2026) — _Evaluating Spanish Medical NER: Encoder-only vs LLM approaches_
-- Cofala & Xion (2025) — _RAGtifier: SIGIR LiveRAG 2025 Challenge_
+| Paper | Link |
+|---|---|
+| Gutierrez et al. (2025) — HippoRAG 2: From RAG to Memory | [arXiv:2502.14802](https://arxiv.org/abs/2502.14802) |
+| Zhao et al. (2025) — MedRAG: KG-elicited Reasoning for Healthcare Copilot | [arXiv:2502.04413](https://arxiv.org/abs/2502.04413) |
+| Chen et al. (2025) — PathRAG: Pruning Graph-based RAG with Relational Paths | [arXiv:2502.14902](https://arxiv.org/abs/2502.14902) |
+| Es et al. (2023) — RAGAs: Automated Evaluation of RAG | [arXiv:2309.15217](https://arxiv.org/abs/2309.15217) |
+| Gao et al. (2022) — Precise Zero-Shot Dense Retrieval without Relevance Labels (HyDE) | [arXiv:2212.10496](https://arxiv.org/abs/2212.10496) |
+| Wu et al. (2024) — Medical Graph RAG: Towards Safe Medical LLM via GraphRAG | [arXiv:2408.04187](https://arxiv.org/abs/2408.04187) |
+| Nogueira & Cho (2019) — Passage Re-ranking with BERT | [arXiv:1901.04085](https://arxiv.org/abs/1901.04085) |
+| Cormack et al. (2009) — Reciprocal Rank Fusion outperforms Condorcet and individual Rank Learning Methods | [ACM SIGIR](https://dl.acm.org/doi/10.1145/1571941.1572114) |
 
 ---
 
-## Sources
+## Citation
 
-- LightRAG : https://arxiv.org/pdf/2410.05779
-- PathRAG : https://arxiv.org/pdf/2502.14902
-- HippoRAG 2 : https://arxiv.org/pdf/2502.14802
-- HIV Guidelines : https://clinicalinfo.hiv.gov/en/guidelines-search?guidelines-search=HIV
-- GeSIDA Guidelines : https://gesida-seimc.org/category/guias-clinicas/antirretroviral-historial/
-- Entity Recognition (for spanish) : https://www.techscience.com/cmc/v87n3/66969
-- RAGAs : https://arxiv.org/pdf/2309.15217
-- MedRAG : https://arxiv.org/pdf/2502.04413
--
-
-## License
-
-This project was developed during an internship at
-**CTB-UPM (Centro de Tecnología Biomédica), Universidad Politécnica de Madrid, Spain**.
-
-For research and educational use only.
+```bibtex
+@misc{velanganni2026medalrag,
+  author  = {Cyrille Velanganni},
+  title   = {MedalRAG: A Hybrid RAG System for HIV Clinical Decision Support},
+  year    = {2026},
+  url     = {https://github.com/cvelanganni/medalrag},
+  note    = {Research internship — MEDAL Lab, CTB-UPM, Madrid}
+}
+```
 
 ---
 
-_Built with ❤️ at CTB-UPM Madrid — 2026_
+*Built at MEDAL Lab (Medical Data Analytics Laboratory), Centro de Tecnología Biomédica, Universidad Politécnica de Madrid.*  
+*Supervised by Ernestina Menasalvas Ruiz.*

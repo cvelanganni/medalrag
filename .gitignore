@@ -1,4 +1,4 @@
-# Python-generated files
+# Python
 __pycache__/
 *.py[oc]
 build/
@@ -6,21 +6,31 @@ dist/
 wheels/
 *.egg-info
 
-# Virtual environments
-.venv
-
-
-.env
-*.pkl
-*.json
-!golden_dataset*.json
-!patient_profiles.json
-conversations/
-patients/
-evaluations/
-__pycache__/
+# Environment
 .venv/
+.env
+
+# Cache and regenerable heavy files
+*.pkl
 umls_cache.json
 graph_checkpoint.txt
 
+# Local data (not versioned)
 data/
+conversations/
+patients/
+patient_profiles.json
+mirage_hiv_strict.json
+
+# Test coverage
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Keep evaluation datasets
+!evaluations/
+!evaluations/*.json
+!evaluations/*.png
+
+# Keep golden datasets
+!golden_dataset*.json

@@ -1,5 +1,5 @@
 """
-hybrid_search.py — Hybrid BM25 + Dense search avec RRF fusion.
+hybrid_search.py — Hybrid BM25 + Dense search with RRF fusion.
 """
 
 import os
@@ -21,19 +21,21 @@ COLLECTION_ES = os.getenv("QDRANT_COLLECTION_ES", "medical_docs_es")
 qdrant = QdrantClient(url=QDRANT_URL, api_key=QDRANT_KEY)
 
 
-# ─────────────────────────────────────────────
-# BM25 Index
-# ─────────────────────────────────────────────
+# ── BM25 Index ─────────────────────────────────────────────────────────────
 
 class BM25Index:
+    """In-memory BM25 index built from a Qdrant collection."""
+
     def __init__(self, collection: str, max_chunks: int = 15000):
         self.collection = collection
         self.points     = []
         self.texts      = []
-        self.tokenized  = []
         self.bm25       = None
         self._built     = False
         self.max_chunks = max_chunks
+
+    def _tokenize(self, text: str) -> list:
+        return [w for w in re.split(r'\s+', text.lower()) if len(w) >= 2]
 
     def build(self, verbose: bool = True):
         if self._built:
@@ -47,74 +49,50 @@ class BM25Index:
                     print(f"  Collection '{self.collection}' not found")
                 return
 
-            all_points = []
-            offset     = None
+            all_points, offset = [], None
             while True:
                 result, next_offset = qdrant.scroll(
-                    collection_name = self.collection,
-                    limit           = 1000,
-                    offset          = offset,
-                    with_payload    = True,
-                    with_vectors    = False,
+                    collection_name=self.collection,
+                    limit=1000, offset=offset,
+                    with_payload=True, with_vectors=False,
                 )
                 all_points.extend(result)
-                if next_offset is None:
-                    break
-                if len(all_points) >= self.max_chunks:
+                if next_offset is None or len(all_points) >= self.max_chunks:
                     break
                 offset = next_offset
 
             self.points    = all_points[:self.max_chunks]
             self.texts     = [p.payload.get("text", "") for p in self.points]
-            self.tokenized = [self._tokenize(t) for t in self.texts]
-            self.tokenized = [t for t in self.tokenized if t]
-            if not self.tokenized:
+            tokenized      = [self._tokenize(t) for t in self.texts if t]
+            if not tokenized:
                 if verbose:
-                    print(f"  ✗ BM25 {self.collection}: no valid tokens — skipping")
+                    print(f"  BM25 {self.collection}: no valid tokens — skipping")
                 return
-            self.bm25      = BM25Okapi(self.tokenized)
-            self._built    = True
-
+            self.bm25   = BM25Okapi(tokenized)
+            self._built = True
             if verbose:
-                print(f"  ✓ BM25 index: {len(self.points)} chunks "
-                      f"in {time.time()-t:.1f}s")
+                print(f"  BM25 index: {len(self.points)} chunks in {time.time()-t:.1f}s")
         except Exception as e:
             if verbose:
-                print(f"  ✗ BM25 build error: {e}")
-
-    def _tokenize(self, text: str) -> list:
-        text   = text.lower()
-        tokens = [
-            w for w in re.split(r'\s+', text)
-            if len(w) >= 2
-        ]
-        return tokens
+                print(f"  BM25 build error: {e}")
 
     def search(self, query: str, limit: int = 10) -> list:
         if not self._built or self.bm25 is None:
             return []
-        tokens  = self._tokenize(query)
-        scores  = self.bm25.get_scores(tokens)
+        scores  = self.bm25.get_scores(self._tokenize(query))
         top_idx = np.argsort(scores)[::-1][:limit]
-        return [
-            (self.points[i], float(scores[i]))
-            for i in top_idx if scores[i] > 0
-        ]
+        return [(self.points[i], float(scores[i])) for i in top_idx if scores[i] > 0]
 
     @property
     def is_ready(self) -> bool:
         return self._built and self.bm25 is not None
 
 
-# ─────────────────────────────────────────────
-# Singletons
-# ─────────────────────────────────────────────
+# ── BM25 Singletons ────────────────────────────────────────────────────────
 
 _bm25_indices: dict = {}
 
-
 def get_bm25_index(collection: str) -> BM25Index:
-    global _bm25_indices
     if collection not in _bm25_indices:
         idx = BM25Index(collection)
         idx.build()
@@ -122,25 +100,22 @@ def get_bm25_index(collection: str) -> BM25Index:
     return _bm25_indices[collection]
 
 
-# ─────────────────────────────────────────────
-# Embedding
-# ─────────────────────────────────────────────
+# ── Embedding ──────────────────────────────────────────────────────────────
 
 def get_embedding(text: str) -> list:
+    """Returns a BGE-M3 embedding vector via Ollama."""
     try:
         resp = requests.post(
             "http://localhost:11434/api/embed",
             json={"model": "bge-m3", "input": text[:8000]},
             timeout=60
         )
-        return resp.json().get("embeddings", [[0.0]*1024])[0]
+        return resp.json().get("embeddings", [[0.0] * 1024])[0]
     except Exception:
         return [0.0] * 1024
 
 
-# ─────────────────────────────────────────────
-# RRF Fusion
-# ─────────────────────────────────────────────
+# ── RRF Fusion ─────────────────────────────────────────────────────────────
 
 def reciprocal_rank_fusion(
     dense_results : list,
@@ -149,27 +124,24 @@ def reciprocal_rank_fusion(
     dense_weight  : float = 0.7,
     sparse_weight : float = 0.3,
 ) -> list:
-    scores = {}
-    points = {}
+    """Fuses dense and BM25 rankings using Reciprocal Rank Fusion (RRF)."""
+    scores, points = {}, {}
 
     for rank, point in enumerate(dense_results, start=1):
-        pid          = str(point.id)
-        scores[pid]  = scores.get(pid, 0) + dense_weight / (k + rank)
-        points[pid]  = point
+        pid         = str(point.id)
+        scores[pid] = scores.get(pid, 0) + dense_weight / (k + rank)
+        points[pid] = point
 
     for rank, (point, _) in enumerate(sparse_results, start=1):
-        pid          = str(point.id)
-        scores[pid]  = scores.get(pid, 0) + sparse_weight / (k + rank)
+        pid         = str(point.id)
+        scores[pid] = scores.get(pid, 0) + sparse_weight / (k + rank)
         if pid not in points:
             points[pid] = point
 
-    sorted_ids = sorted(scores, key=lambda p: scores[p], reverse=True)
-    return [points[pid] for pid in sorted_ids]
+    return [points[pid] for pid in sorted(scores, key=lambda p: scores[p], reverse=True)]
 
 
-# ─────────────────────────────────────────────
-# Hybrid Search
-# ─────────────────────────────────────────────
+# ── Hybrid Search ──────────────────────────────────────────────────────────
 
 def hybrid_search(
     query        : str,
@@ -180,32 +152,26 @@ def hybrid_search(
     use_hyde     : bool  = False,
     hyde_doc     : str   = None,
 ) -> dict:
-    t  = time.time()
-    dl = limit * 2
-    sl = limit * 2
+    """
+    Runs hybrid BM25 + dense search and fuses results with RRF.
+    Optionally averages query and HyDE document embeddings.
+    """
+    prefix = "Represent this sentence for searching relevant passages: "
 
-    # Dense
     if use_hyde and hyde_doc:
-        q_emb = get_embedding(
-            f"Represent this sentence for searching relevant passages: {query}"
-        )
-        h_emb = get_embedding(
-            f"Represent this sentence for searching relevant passages: {hyde_doc}"
-        )
-        emb = [(q+h)/2 for q, h in zip(q_emb, h_emb)]
+        q_emb = get_embedding(prefix + query)
+        h_emb = get_embedding(prefix + hyde_doc)
+        emb   = [(q + h) / 2 for q, h in zip(q_emb, h_emb)]
     else:
-        emb = get_embedding(
-            f"Represent this sentence for searching relevant passages: {query}"
-        )
+        emb = get_embedding(prefix + query)
 
+    # Dense search
     dense_results = []
     try:
         if qdrant.collection_exists(collection):
             raw  = qdrant.query_points(
-                collection_name = collection,
-                query           = emb,
-                with_payload    = True,
-                limit           = dl,
+                collection_name=collection,
+                query=emb, with_payload=True, limit=limit * 2,
             ).points
             seen, unique = set(), []
             for p in raw:
@@ -217,21 +183,20 @@ def hybrid_search(
     except Exception as e:
         print(f"  Dense search error ({collection}): {e}")
 
-    # BM25
+    # BM25 search
     sparse_results = []
     try:
         bm25_idx = get_bm25_index(collection)
         if bm25_idx.is_ready:
-            sparse_results = bm25_idx.search(query, limit=sl)
+            sparse_results = bm25_idx.search(query, limit=limit * 2)
     except Exception as e:
         print(f"  BM25 search error ({collection}): {e}")
 
-    # RRF
+    # Fuse results
     if dense_results and sparse_results:
         fused = reciprocal_rank_fusion(
             dense_results, sparse_results,
-            dense_weight=dense_weight,
-            sparse_weight=sparse_weight,
+            dense_weight=dense_weight, sparse_weight=sparse_weight,
         )
     elif dense_results:
         fused = dense_results
@@ -242,7 +207,6 @@ def hybrid_search(
         "results"      : fused[:limit],
         "dense_count"  : len(dense_results),
         "sparse_count" : len(sparse_results),
-        "time_ms"      : round((time.time() - t) * 1000, 1),
     }
 
 
@@ -253,7 +217,7 @@ def hybrid_search_simple(
     use_hyde  : bool = False,
     hyde_doc  : str  = None,
 ) -> list:
-    """Drop-in replacement pour search_qdrant()."""
+    """Simplified wrapper — returns results list directly."""
     return hybrid_search(
         query=query, collection=collection,
         limit=limit, use_hyde=use_hyde, hyde_doc=hyde_doc,

@@ -1,0 +1,441 @@
+{
+  "timestamp": "2026-08-05T18:47:55.707118",
+  "dataset_path": "mirage_hiv_strict.json",
+  "n_questions": 41,
+  "accuracy": 0.7073170731707317,
+  "correct": 29,
+  "by_dataset": {
+    "medqa": {
+      "correct": 17,
+      "total": 22
+    },
+    "medmcqa": {
+      "correct": 5,
+      "total": 8
+    },
+    "pubmedqa": {
+      "correct": 1,
+      "total": 4
+    },
+    "bioasq": {
+      "correct": 2,
+      "total": 2
+    },
+    "mmlu": {
+      "correct": 4,
+      "total": 5
+    }
+  },
+  "results": [
+    {
+      "id": "0163",
+      "dataset": "medqa",
+      "question": "A 32-year-old man with HIV infection is brought to the emergency department by his roommate because ",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0168",
+      "dataset": "medqa",
+      "question": "A 56-year-old man is brought to the emergency department. He was found unconscious on the street. Th",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0192",
+      "dataset": "medqa",
+      "question": "Please refer to the summary above to answer this question\nThe authors of the study have decided to c",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0208",
+      "dataset": "medqa",
+      "question": "A clinical researcher is interested in creating a new drug for HIV patients. Darunavir has been part",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0211",
+      "dataset": "medqa",
+      "question": "A 65-year-old man presents with painless swelling of the neck over the past week. He also says he ha",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0221",
+      "dataset": "medqa",
+      "question": "A 2,300 g (5 lb) male newborn is delivered to a 29-year-old primigravid woman. The mother has HIV an",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0247",
+      "dataset": "medqa",
+      "question": "A 42-year-old man with AIDS comes to the physician for intermittent fever, nonproductive cough, mala",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0249",
+      "dataset": "medqa",
+      "question": "A research group has developed a low-cost diagnostic retinal imaging device for cytomegalovirus reti",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0286",
+      "dataset": "medqa",
+      "question": "A 27-year-old HIV positive female gave birth to a 7lb 2oz (3.2 kg) baby girl. The obstetrician is wo",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0309",
+      "dataset": "medqa",
+      "question": "A 56-year-old man is brought to the emergency room after a motor vehicle accident. The patient’s vit",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0342",
+      "dataset": "medqa",
+      "question": "A 55-year-old woman with a history of HIV presents to the emergency department with progressive dysp",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0364",
+      "dataset": "medqa",
+      "question": "A 34-year-old man currently staying at an addiction center presents to the staff psychiatrist with d",
+      "predicted": "D",
+      "correct": "A",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0439",
+      "dataset": "medqa",
+      "question": "A 23-year-old man presents to the office for a circular, itchy rash over the abdomen that has been s",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0510",
+      "dataset": "medqa",
+      "question": "A 46-year-old woman with a history of previously well-controlled HIV infection comes to the physicia",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0689",
+      "dataset": "medqa",
+      "question": "A 33-year-old man presents to the infectious diseases clinic for follow-up. He was recently admitted",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0734",
+      "dataset": "medqa",
+      "question": "A 10-year-old girl is brought to a clinic by her parents after 1 week of difficulty breathing, dry c",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0759",
+      "dataset": "medqa",
+      "question": "A 33-year-old woman presents to the clinic for follow-up of her AIDS treatment with highly active an",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0824",
+      "dataset": "medqa",
+      "question": "A 47-year-old man with a history of HIV1 infection presents to his HIV clinic to discuss his antiret",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "0856",
+      "dataset": "medqa",
+      "question": "A 45-year-old man presents to his primary care provider for two weeks of low-grade fever and sore th",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "1109",
+      "dataset": "medqa",
+      "question": "A 46-year-old man comes to the emergency department because of a 4-week history of fatigue and heada",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "1193",
+      "dataset": "medqa",
+      "question": "A 45-year-old man comes to the physician for a routine health maintenance examination. He was diagno",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "1250",
+      "dataset": "medqa",
+      "question": "A 37-year-old woman with an HIV infection comes to the physician for a follow-up examination. Six mo",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "93d8bac0-76ae-4440-91c0-fa3b724bbc65",
+      "dataset": "medmcqa",
+      "question": "Which of the following will not decrease mother to child transmission of HIV?",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "51203235-22e6-43fb-a51f-a2fcceb5f042",
+      "dataset": "medmcqa",
+      "question": "Which of the following is the most common funga. infection of the eye seen in an HIV positive patien",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "4db71792-b492-48c3-8010-6dd96bc484e2",
+      "dataset": "medmcqa",
+      "question": "A nurse got accidental prick from the HIV infected needle. Which of the following is T/F regarding t",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "138f2721-a8f6-4456-a302-e63411415f00",
+      "dataset": "medmcqa",
+      "question": "A known HIV patient on anti - retroviral therapy presented with diarrhea of six months duration. Sto",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "9b8ebf6f-3451-401c-838d-f2f50a3e7d8a",
+      "dataset": "medmcqa",
+      "question": "Which of the following is associated with HIV infection",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "80b1797f-6a00-42e2-92a1-6f913e5deded",
+      "dataset": "medmcqa",
+      "question": "In which of the following, viral load done by Real Time PCR is of no role in investigative procedure",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "56b31e0c-e675-450b-838d-52ac15efc3fd",
+      "dataset": "medmcqa",
+      "question": "Transmission of HIV from mother to child is prevented by all the following except:",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "7f6a2842-7816-4a42-821c-d6e066a36fb4",
+      "dataset": "medmcqa",
+      "question": "If untreated, percentage of mother to child transmission of HIV during delivery without intervention",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "23949294",
+      "dataset": "pubmedqa",
+      "question": "Treatment as prevention in resource-limited settings: is it feasible to maintain HIV viral load supp",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "21712147",
+      "dataset": "pubmedqa",
+      "question": "Does combining antiretroviral agents in a single dosage form enhance quality of life of HIV/AIDS pat",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "28196511",
+      "dataset": "pubmedqa",
+      "question": "Antiretroviral therapy related adverse effects: Can sub-Saharan Africa cope with the new \"test and t",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "23149821",
+      "dataset": "pubmedqa",
+      "question": "Should HIV-infected patients be screened for silent myocardial ischaemia using gated myocardial perf",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "5e2e1017fbd6abf43b000020",
+      "dataset": "bioasq",
+      "question": "Are CD8+ (cytotoxic) T cells and  CD4+ Helper T cells generated in the thyroid and express the T-cel",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "5c5f2cef1a4c55d80b000022",
+      "dataset": "bioasq",
+      "question": "There is no drug available to prevent HIV infection, Pre-exposure prophylaxis (PrEP), yes or no?",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "professional_medicine-037",
+      "dataset": "mmlu",
+      "question": "A 37-year-old woman with AIDS comes to the physician because of a 1-month history of progressive dia",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "professional_medicine-054",
+      "dataset": "mmlu",
+      "question": "A phase 2, multicenter trial was conducted to determine the efficacy of a new vaccine for prevention",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "professional_medicine-187",
+      "dataset": "mmlu",
+      "question": "A 31-year-old man with a 5-year history of HIV infection comes to the office because of anal pain, p",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "professional_medicine-222",
+      "dataset": "mmlu",
+      "question": "A 26-year-old woman with HIV infection comes to the office because of a 4-day history of pain and re",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "chunks_en": 5,
+      "chunks_es": 3
+    },
+    {
+      "id": "professional_medicine-259",
+      "dataset": "mmlu",
+      "question": "A 35-year-old male presents to the office for the result of an HIV test, and he is informed that the",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "chunks_en": 5,
+      "chunks_es": 3
+    }
+  ]
+}

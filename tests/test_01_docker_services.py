@@ -88,8 +88,8 @@ def test_neo4j() -> bool:
     print("\n[3] Neo4j (knowledge graph)")
     bolt_ok = check_port("Neo4j Bolt", "localhost", 7687)
 
-    # Neo4j HTTP peut être lent à démarrer
-    # Vérifie via une vraie connexion Bolt
+    # Neo4j HTTP can be slow to start
+    # Verify via a real Bolt connection
     try:
         from neo4j import GraphDatabase
         import os

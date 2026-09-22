@@ -1,0 +1,803 @@
+{
+  "date": "2026-08-27T18:04:51.891814",
+  "n_questions": 35,
+  "n_versions": 1,
+  "dataset": "golden_dataset_v2.json",
+  "evaluator": "Claude Haiku",
+  "statistical_tests": {},
+  "results": [
+    {
+      "version": "v9_hybrid",
+      "description": "Full pipeline + Hybrid BM25+Dense",
+      "config": {
+        "version": "v9_hybrid",
+        "description": "Full pipeline + Hybrid BM25+Dense",
+        "use_hyde": true,
+        "use_graph": true,
+        "use_pathrag": true,
+        "use_ppr": true,
+        "use_reranker": true,
+        "use_es": true,
+        "use_hybrid": true,
+        "use_expansion": true
+      },
+      "overall": {
+        "context_recall": 0.7515192743764173,
+        "faithfulness": 0.7301619494740604,
+        "factual_correctness": 0.3608571428571429,
+        "average": 0.6141794555692068
+      },
+      "breakdown": {
+        "simple": {
+          "context_recall": 0.7012987012987012,
+          "faithfulness": 0.713439590712318,
+          "factual_correctness": 0.1827272727272727,
+          "average": 0.5324885215794306
+        },
+        "complex": {
+          "context_recall": 0.774537037037037,
+          "faithfulness": 0.7378263639065258,
+          "factual_correctness": 0.44250000000000006,
+          "average": 0.6516211336478542
+        },
+        "lang_en": {
+          "context_recall": 0.7459467120181407,
+          "faithfulness": 0.7221274034103994,
+          "factual_correctness": 0.3975,
+          "average": 0.62185803847618
+        },
+        "lang_es": {
+          "context_recall": 0.7738095238095237,
+          "faithfulness": 0.7623001337287051,
+          "factual_correctness": 0.21428571428571427,
+          "average": 0.5834651239413143
+        }
+      },
+      "ml_metrics": {
+        "context_recall": {
+          "ci_95": {
+            "mean": 0.7515,
+            "ci_lower": 0.6661,
+            "ci_upper": 0.837,
+            "std": 0.2579,
+            "n": 35
+          },
+          "per_category": {
+            "simple": {
+              "mean": 0.7013,
+              "ci_lower": 0.5592,
+              "ci_upper": 0.8434,
+              "std": 0.2405,
+              "n": 11
+            },
+            "complex": {
+              "mean": 0.7745,
+              "ci_lower": 0.6676,
+              "ci_upper": 0.8814,
+              "std": 0.2672,
+              "n": 24
+            }
+          },
+          "per_lang": {
+            "en": {
+              "mean": 0.7459,
+              "ci_lower": 0.6451,
+              "ci_upper": 0.8468,
+              "std": 0.2723,
+              "n": 28
+            },
+            "es": {
+              "mean": 0.7738,
+              "ci_lower": 0.6209,
+              "ci_upper": 0.9267,
+              "std": 0.2063,
+              "n": 7
+            }
+          }
+        },
+        "faithfulness": {
+          "ci_95": {
+            "mean": 0.7302,
+            "ci_lower": 0.6796,
+            "ci_upper": 0.7807,
+            "std": 0.1527,
+            "n": 35
+          },
+          "per_category": {
+            "simple": {
+              "mean": 0.7134,
+              "ci_lower": 0.6479,
+              "ci_upper": 0.7789,
+              "std": 0.1109,
+              "n": 11
+            },
+            "complex": {
+              "mean": 0.7378,
+              "ci_lower": 0.6698,
+              "ci_upper": 0.8059,
+              "std": 0.17,
+              "n": 24
+            }
+          },
+          "per_lang": {
+            "en": {
+              "mean": 0.7221,
+              "ci_lower": 0.6605,
+              "ci_upper": 0.7838,
+              "std": 0.1665,
+              "n": 28
+            },
+            "es": {
+              "mean": 0.7623,
+              "ci_lower": 0.7055,
+              "ci_upper": 0.8191,
+              "std": 0.0767,
+              "n": 7
+            }
+          }
+        },
+        "factual_correctness": {
+          "ci_95": {
+            "mean": 0.3609,
+            "ci_lower": 0.2764,
+            "ci_upper": 0.4453,
+            "std": 0.255,
+            "n": 35
+          },
+          "per_category": {
+            "simple": {
+              "mean": 0.1827,
+              "ci_lower": 0.0846,
+              "ci_upper": 0.2809,
+              "std": 0.1661,
+              "n": 11
+            },
+            "complex": {
+              "mean": 0.4425,
+              "ci_lower": 0.3429,
+              "ci_upper": 0.5421,
+              "std": 0.249,
+              "n": 24
+            }
+          },
+          "per_lang": {
+            "en": {
+              "mean": 0.3975,
+              "ci_lower": 0.2988,
+              "ci_upper": 0.4962,
+              "std": 0.2665,
+              "n": 28
+            },
+            "es": {
+              "mean": 0.2143,
+              "ci_lower": 0.1162,
+              "ci_upper": 0.3124,
+              "std": 0.1324,
+              "n": 7
+            }
+          }
+        }
+      },
+      "per_q_log": [
+        {
+          "category": "simple",
+          "lang": "en",
+          "question": "What is the recommended first-line antiretroviral regimen for treatment-naive adults with HIV?",
+          "entities": [
+            "HIV infection",
+            "Raltegravir",
+            "Zidovudine",
+            "Etravirine"
+          ],
+          "triplets_count": 1351,
+          "ppr_count": 1336,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.25,
+          "faithfulness": 0.7333333333333333,
+          "factual_correctness": 0.12
+        },
+        {
+          "category": "simple",
+          "lang": "en",
+          "question": "At what CD4 count should Pneumocystis pneumonia (PCP) prophylaxis be initiated in HIV patients?",
+          "entities": [
+            "CD4",
+            "HIV infection",
+            "Pneumocystis pneumonia"
+          ],
+          "triplets_count": 450,
+          "ppr_count": 440,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.7142857142857143,
+          "faithfulness": 0.8095238095238095,
+          "factual_correctness": 0.13
+        },
+        {
+          "category": "simple",
+          "lang": "en",
+          "question": "When should antiretroviral therapy be initiated in adults newly diagnosed with HIV?",
+          "entities": [
+            "HIV infection",
+            "Etravirine",
+            "Raltegravir",
+            "Zidovudine",
+            "ART"
+          ],
+          "triplets_count": 1241,
+          "ppr_count": 1215,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.6666666666666666,
+          "faithfulness": 0.8,
+          "factual_correctness": 0.0
+        },
+        {
+          "category": "simple",
+          "lang": "en",
+          "question": "What is considered virologic suppression in patients on antiretroviral therapy?",
+          "entities": [
+            "ART",
+            "Raltegravir",
+            "Zidovudine",
+            "Etravirine"
+          ],
+          "triplets_count": 1584,
+          "ppr_count": 1571,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.5454545454545454,
+          "factual_correctness": 0.13
+        },
+        {
+          "category": "simple",
+          "lang": "en",
+          "question": "How often should viral load be monitored in patients on stable antiretroviral therapy?",
+          "entities": [
+            "Etravirine",
+            "Raltegravir",
+            "Zidovudine",
+            "ART",
+            "Viral load"
+          ],
+          "triplets_count": 653,
+          "ppr_count": 634,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.6666666666666666,
+          "faithfulness": 0.8571428571428571,
+          "factual_correctness": 0.0
+        },
+        {
+          "category": "simple",
+          "lang": "es",
+          "question": "¿Cuál es el régimen antirretroviral de primera línea recomendado para adultos con VIH sin tratamiento previo?",
+          "entities": [
+            "HIV infection",
+            "Raltegravir",
+            "Zidovudine",
+            "Etravirine"
+          ],
+          "triplets_count": 1351,
+          "ppr_count": 1336,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.4,
+          "faithfulness": 0.7333333333333333,
+          "factual_correctness": 0.12
+        },
+        {
+          "category": "simple",
+          "lang": "es",
+          "question": "¿Cuándo se debe iniciar la terapia antirretroviral en adultos recién diagnosticados con VIH?",
+          "entities": [
+            "HIV infection",
+            "Raltegravir",
+            "Zidovudine",
+            "Etravirine"
+          ],
+          "triplets_count": 1351,
+          "ppr_count": 1336,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.6666666666666666,
+          "faithfulness": 0.7857142857142857,
+          "factual_correctness": 0.3
+        },
+        {
+          "category": "simple",
+          "lang": "es",
+          "question": "¿Con qué frecuencia se debe monitorizar la carga viral en pacientes con tratamiento antirretroviral estable?",
+          "entities": [
+            "Etravirine",
+            "Raltegravir",
+            "Zidovudine",
+            "ART",
+            "Viral load"
+          ],
+          "triplets_count": 653,
+          "ppr_count": 634,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.6666666666666666,
+          "factual_correctness": 0.0
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "A patient on Dolutegravir is starting Rifampin for tuberculosis. What dose adjustment is needed and why?",
+          "entities": [
+            "Tuberculosis",
+            "Dolutegravir",
+            "ART",
+            "Rifampin"
+          ],
+          "triplets_count": 787,
+          "ppr_count": 773,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.6,
+          "faithfulness": 0.8235294117647058,
+          "factual_correctness": 0.4
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "Why is Dolutegravir contraindicated with Dofetilide, and what is the mechanism?",
+          "entities": [
+            "Dolutegravir",
+            "Dofetilide"
+          ],
+          "triplets_count": 1284,
+          "ppr_count": 1278,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.25,
+          "faithfulness": 0.21428571428571427,
+          "factual_correctness": 0.62
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What antiretroviral regimen is recommended for HIV patients with hepatitis B (HBV) co-infection?",
+          "entities": [
+            "HIV infection",
+            "Etravirine",
+            "HBV",
+            "Raltegravir",
+            "Zidovudine"
+          ],
+          "triplets_count": 1041,
+          "ppr_count": 1022,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.8,
+          "faithfulness": 0.8095238095238095,
+          "factual_correctness": 0.23
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What are the preferred antiretroviral regimens for HIV/tuberculosis co-infected patients on Rifampin?",
+          "entities": [
+            "Tuberculosis",
+            "HIV infection",
+            "Etravirine",
+            "Rifampin",
+            "Raltegravir",
+            "Zidovudine"
+          ],
+          "triplets_count": 802,
+          "ppr_count": 774,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.6,
+          "faithfulness": 0.7647058823529411,
+          "factual_correctness": 0.5
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What prophylaxis is recommended for Mycobacterium avium complex (MAC) in HIV patients, and at what CD4 threshold?",
+          "entities": [
+            "CD4",
+            "HIV infection",
+            "Mycobacterium avium complex"
+          ],
+          "triplets_count": 451,
+          "ppr_count": 443,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.5,
+          "faithfulness": 0.7894736842105263,
+          "factual_correctness": 0.0
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "Is Dolutegravir preferred or contraindicated during pregnancy, and what are the current recommendations?",
+          "entities": [
+            "Dolutegravir",
+            "Pregnancy"
+          ],
+          "triplets_count": 682,
+          "ppr_count": 677,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.6,
+          "faithfulness": 0.7777777777777778,
+          "factual_correctness": 0.5
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What dose adjustment is required for Dolutegravir when co-administered with Carbamazepine?",
+          "entities": [
+            "Dolutegravir",
+            "Carbamazepine"
+          ],
+          "triplets_count": 1082,
+          "ppr_count": 1076,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.0,
+          "faithfulness": 0.375,
+          "factual_correctness": 0.0
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What drugs make up the Bictegravir/Emtricitabine/Tenofovir alafenamide regimen and for which patients is it preferred?",
+          "entities": [
+            "TDF",
+            "Emtricitabine",
+            "Bictegravir",
+            "TAF"
+          ],
+          "triplets_count": 1448,
+          "ppr_count": 1434,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.8888888888888888,
+          "faithfulness": 0.896551724137931,
+          "factual_correctness": 0.21
+        },
+        {
+          "category": "complex",
+          "lang": "es",
+          "question": "Un paciente con VIH toma Dolutegravir y va a iniciar Rifampicina por tuberculosis. ¿Qué ajuste de dosis se necesita y por qué?",
+          "entities": [
+            "Tuberculosis",
+            "Dolutegravir",
+            "HIV infection",
+            "Rifampin"
+          ],
+          "triplets_count": 547,
+          "ppr_count": 531,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.75,
+          "faithfulness": 0.6666666666666666,
+          "factual_correctness": 0.38
+        },
+        {
+          "category": "complex",
+          "lang": "es",
+          "question": "¿Qué régimen antirretroviral se recomienda para pacientes con VIH y coinfección por hepatitis B (VHB)?",
+          "entities": [
+            "HIV infection",
+            "Etravirine",
+            "HBV",
+            "Raltegravir",
+            "Zidovudine"
+          ],
+          "triplets_count": 1041,
+          "ppr_count": 1022,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.8461538461538461,
+          "factual_correctness": 0.2
+        },
+        {
+          "category": "complex",
+          "lang": "es",
+          "question": "¿Cuál es la profilaxis recomendada para la encefalitis por Toxoplasma gondii en pacientes con VIH y cuándo iniciarla?",
+          "entities": [
+            "HIV infection",
+            "Toxoplasmosis"
+          ],
+          "triplets_count": 466,
+          "ppr_count": 463,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.8,
+          "faithfulness": 0.8518518518518519,
+          "factual_correctness": 0.33
+        },
+        {
+          "category": "complex",
+          "lang": "es",
+          "question": "¿Está el Dolutegravir contraindicado durante el embarazo según las guías GESIDA actualizadas?",
+          "entities": [
+            "Dolutegravir",
+            "Pregnancy"
+          ],
+          "triplets_count": 682,
+          "ppr_count": 677,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.8,
+          "faithfulness": 0.7857142857142857,
+          "factual_correctness": 0.17
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What is the recommended nPEP regimen for an otherwise healthy adult who presents within 72 hours of a high-risk exposure to a known HIV-positive source?",
+          "entities": [
+            "HIV infection",
+            "PEP"
+          ],
+          "triplets_count": 140,
+          "ppr_count": 135,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.8235294117647058,
+          "factual_correctness": 0.33
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "Which antiretroviral medications are not recommended for nPEP use in pregnant women and why?",
+          "entities": [
+            "Etravirine",
+            "Raltegravir",
+            "PEP",
+            "Zidovudine",
+            "Pregnancy"
+          ],
+          "triplets_count": 539,
+          "ppr_count": 524,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.85,
+          "factual_correctness": 0.19
+        },
+        {
+          "category": "simple",
+          "lang": "en",
+          "question": "What does the abbreviation '3TC' stand for in the context of HIV treatment?",
+          "entities": [
+            "HIV infection",
+            "Lamivudine"
+          ],
+          "triplets_count": 1015,
+          "ppr_count": 1012,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.75,
+          "faithfulness": 0.5,
+          "factual_correctness": 0.37
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What are the common side effects associated with the antiretroviral regimens used in nPEP, and which drugs are included in these regimens?",
+          "entities": [
+            "Raltegravir",
+            "PEP",
+            "Zidovudine",
+            "Etravirine"
+          ],
+          "triplets_count": 560,
+          "ppr_count": 552,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.9024390243902439,
+          "factual_correctness": 0.5
+        },
+        {
+          "category": "simple",
+          "lang": "en",
+          "question": "What is the recommended procedure for initiating nPEP when rapid HIV test results are unavailable?",
+          "entities": [
+            "HIV infection",
+            "PEP"
+          ],
+          "triplets_count": 140,
+          "ppr_count": 135,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.6666666666666666,
+          "factual_correctness": 0.4
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "Under what circumstances should nPEP be considered for children with evidence of chronic sexual abuse?",
+          "entities": [
+            "PEP"
+          ],
+          "triplets_count": 452,
+          "ppr_count": 452,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.75,
+          "faithfulness": 0.6666666666666666,
+          "factual_correctness": 0.57
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What is the recommended approach for managing patients with frequent HIV exposure events, and when is nPEP indicated in such cases?",
+          "entities": [
+            "HIV infection",
+            "PEP"
+          ],
+          "triplets_count": 140,
+          "ppr_count": 135,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.85,
+          "factual_correctness": 0.59
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What laboratory evaluations are recommended for persons prescribed tenofovir DF, emtricitabine, and raltegravir or dolutegravir as part of nPEP, and what is the schedule for these tests?",
+          "entities": [
+            "ART",
+            "Raltegravir",
+            "PEP",
+            "Dolutegravir",
+            "Emtricitabine",
+            "TDF"
+          ],
+          "triplets_count": 585,
+          "ppr_count": 552,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.5,
+          "faithfulness": 0.47058823529411764,
+          "factual_correctness": 0.8
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What was the outcome of using a combination of ZDV, 3TC, and high-dose IDV for nPEP in a macaque study modeling vaginal HIV exposure?",
+          "entities": [
+            "HIV infection",
+            "Mycobacterium avium complex",
+            "PEP",
+            "Zidovudine",
+            "Lamivudine"
+          ],
+          "triplets_count": 169,
+          "ppr_count": 150,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.75,
+          "faithfulness": 0.7142857142857143,
+          "factual_correctness": 0.71
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What was the outcome of the 13-week, 4-drug nPEP regimen in the case of the 12-year-old girl with sickle-cell disease who received a blood transfusion?",
+          "entities": [
+            "PEP"
+          ],
+          "triplets_count": 452,
+          "ppr_count": 452,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.8,
+          "factual_correctness": 0.78
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What steps should a healthcare provider take to guide the choice of nPEP medications when the source person is known to have HIV?",
+          "entities": [
+            "HIV infection",
+            "PEP"
+          ],
+          "triplets_count": 140,
+          "ppr_count": 135,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.6666666666666666,
+          "factual_correctness": 0.77
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What is the effectiveness of subcutaneous tenofovir as a post-exposure prophylaxis in macaque models when initiated at different times post-exposure?",
+          "entities": [
+            "PEP",
+            "TDF",
+            "Mycobacterium avium complex"
+          ],
+          "triplets_count": 554,
+          "ppr_count": 552,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.6428571428571429,
+          "factual_correctness": 0.88
+        },
+        {
+          "category": "simple",
+          "lang": "en",
+          "question": "What does nPEP stand for in the context of HIV guidelines?",
+          "entities": [
+            "HIV infection",
+            "PEP"
+          ],
+          "triplets_count": 140,
+          "ppr_count": 135,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 0.6,
+          "faithfulness": 0.75,
+          "factual_correctness": 0.44
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "How does adherence to nPEP regimens compare between TDF/FTC with or without RAL and ZDV/3TC with a RTV-boosted PI among MSM?",
+          "entities": [
+            "Emtricitabine",
+            "TDF/FTC",
+            "Raltegravir",
+            "Ritonavir",
+            "Zidovudine",
+            "PEP",
+            "Lamivudine",
+            "ZDV/3TC",
+            "TDF"
+          ],
+          "triplets_count": 1259,
+          "ppr_count": 1199,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.85,
+          "factual_correctness": 0.56
+        },
+        {
+          "category": "complex",
+          "lang": "en",
+          "question": "What are the considerations and outcomes associated with the use of Nevirapine (NVP) in post-exposure prophylaxis (PEP) regimens according to the guidelines?",
+          "entities": [
+            "Nevirapine",
+            "PEP"
+          ],
+          "triplets_count": 454,
+          "ppr_count": 452,
+          "chunks_en": 8,
+          "chunks_es": 5,
+          "context_recall": 1.0,
+          "faithfulness": 0.8695652173913043,
+          "factual_correctness": 0.4
+        }
+      ]
+    }
+  ],
+  "visualizations": {
+    "bars": "evaluations\\ablation_bars_20260827_171526.png",
+    "heatmap": "evaluations\\heatmap_20260827_171526.png",
+    "categories": "evaluations\\category_breakdown_20260827_171526.png"
+  }
+}
